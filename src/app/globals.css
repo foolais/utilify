@@ -120,3 +120,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .auth-title {
+    @apply text-center text-2xl font-bold tracking-wide;
+  }
+  .auth-footer {
+    @apply flex flex-col items-center justify-center space-y-4 text-center text-sm;
+  }
+}
