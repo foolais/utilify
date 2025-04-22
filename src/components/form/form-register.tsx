@@ -19,6 +19,7 @@ interface iFormRegister {
   password: string;
   confirmPassword: string;
 }
+
 const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
   const [formValues, setFormValues] = useState<iFormRegister>({
     name: "",
@@ -54,7 +55,9 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
               label="Name"
               value={(formValues as iFormRegister).name}
               setFormValues={setFormValues}
-              error={state?.error?.name}
+              error={
+                state?.error && "name" in state.error ? state.error.name : []
+              }
               placeholder="John Doe"
             />
             <FormFieldInput
@@ -62,7 +65,9 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
               label="Email"
               value={(formValues as iFormRegister).email}
               setFormValues={setFormValues}
-              error={state?.error?.email}
+              error={
+                state?.error && "email" in state.error ? state.error.email : []
+              }
               placeholder="johndoe@me.com"
               type="email"
             />
@@ -71,7 +76,11 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
               label="Password"
               value={(formValues as iFormRegister).password}
               setFormValues={setFormValues}
-              error={state?.error?.password}
+              error={
+                state?.error && "password" in state.error
+                  ? state.error.password
+                  : []
+              }
               placeholder="********"
               type="password"
             />
@@ -80,7 +89,11 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
               label="Confirm Password"
               value={(formValues as iFormRegister).confirmPassword}
               setFormValues={setFormValues}
-              error={state?.error?.confirmPassword}
+              error={
+                state?.error && "confirmPassword" in state.error
+                  ? state.error.confirmPassword
+                  : []
+              }
               placeholder="********"
               type="password"
             />

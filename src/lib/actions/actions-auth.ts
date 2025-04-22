@@ -1,25 +1,35 @@
 "use server";
 
-import { RegisterSchema } from "@/lib/zod/zod-auth";
+import { LoginSchema, RegisterSchema } from "@/lib/zod/zod-auth";
 import { hashSync } from "bcrypt-ts";
 import { prisma } from "@/lib/prisma";
+import { signIn } from "../../../auth";
+import { AuthError } from "next-auth";
 
 export const registerCredentials = async (
   prevState: unknown,
   formData: FormData,
 ) => {
-  const validateFields = RegisterSchema.safeParse(
+  const validatedFields = RegisterSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
 
-  if (!validateFields.success) {
+  if (!validatedFields.success) {
     return {
-      error: validateFields.error.flatten().fieldErrors,
+      error: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  const { name, email, password } = validateFields.data;
+  const { name, email, password } = validatedFields.data;
   const hashedPassword = hashSync(password, 10);
+
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    return {
+      message: "Email is already taken.",
+      error: { email: ["Email is already taken."] },
+    };
+  }
 
   try {
     await prisma.user.create({
@@ -33,5 +43,44 @@ export const registerCredentials = async (
   } catch (error) {
     console.error(error);
     return { message: "Failed to create user" };
+  }
+};
+
+export const loginCredentials = async (
+  prevState: unknown,
+  formData: FormData,
+) => {
+  const validatedFields = LoginSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success) {
+    return {
+      error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { email, password } = validatedFields.data;
+  const user = await prisma.user.findUnique({ where: { email } });
+  console.log({ user });
+  if (!user) return { error: { auth: ["User not found"] } };
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: user?.role === "admin" ? "/admin" : "/",
+    });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AuthError) {
+      switch (error.name) {
+        case "CredentialsSignin":
+          return { message: "Invalid email or password" };
+        default:
+          return { message: "Authentication failed" };
+      }
+    }
+    throw error;
   }
 };

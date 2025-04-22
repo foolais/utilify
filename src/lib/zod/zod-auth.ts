@@ -15,3 +15,10 @@ export const RegisterSchema = object({
   message: "Passwords do not match",
   path: ["confirmPassword"],
 });
+
+export const LoginSchema = object({
+  email: string().email("Invalid email"),
+  password: string()
+    .min(3, "Password must be more than 3 characters")
+    .max(20, "Password must be less than 20 characters"),
+});
