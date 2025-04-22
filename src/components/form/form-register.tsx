@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,11 +8,38 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Title from "@/components/ui/title";
+import { registerCredentials } from "@/lib/actions/actions-auth";
+import { useActionState, useEffect, useState } from "react";
+import { FormFieldInput } from "./form-field";
 
+interface iFormRegister {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
+  const [formValues, setFormValues] = useState<iFormRegister>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [state, formAction, isPending] = useActionState(
+    registerCredentials,
+    null,
+  );
+
+  useEffect(() => {
+    if (state && state.error) console.log(state.message);
+    else if (state?.success) {
+      console.log(state.message);
+      onToggleForm();
+    }
+  }, [state, onToggleForm]);
+
   return (
     <Card className="w-[350px]">
       <CardHeader className="text-center">
@@ -18,33 +47,50 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
         <CardTitle className="auth-title">Create an Account</CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
+        <form id="form-register" action={formAction}>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Username</Label>
-              <Input id="name" placeholder="John Doe" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="johndoe@me.com" type="email" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" placeholder="********" type="password" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                placeholder="********"
-                type="password"
-              />
-            </div>
+            <FormFieldInput
+              name="name"
+              label="Name"
+              value={(formValues as iFormRegister).name}
+              setFormValues={setFormValues}
+              error={state?.error?.name}
+              placeholder="John Doe"
+            />
+            <FormFieldInput
+              name="email"
+              label="Email"
+              value={(formValues as iFormRegister).email}
+              setFormValues={setFormValues}
+              error={state?.error?.email}
+              placeholder="johndoe@me.com"
+              type="email"
+            />
+            <FormFieldInput
+              name="password"
+              label="Password"
+              value={(formValues as iFormRegister).password}
+              setFormValues={setFormValues}
+              error={state?.error?.password}
+              placeholder="********"
+              type="password"
+            />
+            <FormFieldInput
+              name="confirmPassword"
+              label="Confirm Password"
+              value={(formValues as iFormRegister).confirmPassword}
+              setFormValues={setFormValues}
+              error={state?.error?.confirmPassword}
+              placeholder="********"
+              type="password"
+            />
           </div>
         </form>
       </CardContent>
       <CardFooter className="auth-footer">
-        <Button className="w-full">Register</Button>
+        <Button className="w-full" form="form-register" disabled={isPending}>
+          Register
+        </Button>
         <p>
           Already have an account?{" "}
           <Button
@@ -52,6 +98,7 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
             size="sm"
             className="px-1.5"
             onClick={onToggleForm}
+            disabled={isPending}
           >
             Sign in
           </Button>
