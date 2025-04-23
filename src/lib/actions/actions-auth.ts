@@ -62,14 +62,15 @@ export const loginCredentials = async (
 
   const { email, password } = validatedFields.data;
   const user = await prisma.user.findUnique({ where: { email } });
-  console.log({ user });
   if (!user) return { error: { auth: ["User not found"] } };
+  const redirectUrl =
+    user?.role === "admin" ? "/admin/dashboard" : "/dashboard";
 
   try {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: user?.role === "admin" ? "/admin" : "/",
+      redirectTo: redirectUrl,
     });
   } catch (error) {
     console.error(error);
