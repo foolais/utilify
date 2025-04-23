@@ -14,59 +14,66 @@ import {
 } from "../ui/command";
 import { cn } from "@/lib/utils";
 
-interface iFormSearch {
-  isFilterCategory?: boolean;
+interface CategoryOption {
+  value: string;
+  label: string;
 }
 
-const datas = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-];
+interface iFormSearch {
+  className?: string;
+  isFilterCategory?: boolean;
+  onSearch: (searchValue: string, categoryValue: string) => void;
+  categories?: CategoryOption[];
+}
 
-const FormSearch = ({ isFilterCategory }: iFormSearch) => {
+const FormSearch = ({
+  className,
+  isFilterCategory,
+  categories,
+  onSearch,
+}: iFormSearch) => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
 
   return (
-    <div className="flex w-full items-center justify-center space-x-2">
+    <div
+      className={cn(
+        "flex w-full flex-col items-center justify-center gap-4 sm:flex-row",
+        className,
+      )}
+    >
       <Input
         type="text"
         placeholder="Search Here..."
-        className="max-w-sm"
+        className="w-3/4 sm:w-[300px] md:w-[400px]"
         onChange={(e) => setSearchValue(e.target.value)}
         value={searchValue}
       />
       {/* Filter Category */}
-      {isFilterCategory ? (
+      {isFilterCategory && categories ? (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[200px] justify-between"
+              className="w-3/4 justify-between sm:w-[200px] md:w-[300px]"
             >
               {categoryValue ? (
-                datas.find((data) => data.value === categoryValue)?.label
+                categories.find((data) => data.value === categoryValue)?.label
               ) : (
                 <p className="font-light">Select category</p>
               )}
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0">
+          <PopoverContent className="w-3/4 p-0 sm:w-[200px] md:w-[300px]">
             <Command>
               <CommandInput placeholder="Search category..." className="h-9" />
               <CommandList>
                 <CommandEmpty>No category found.</CommandEmpty>
-                {datas.map((data) => (
+                {categories.map((data) => (
                   <CommandItem
                     key={data.value}
                     value={data.value}
@@ -95,7 +102,11 @@ const FormSearch = ({ isFilterCategory }: iFormSearch) => {
         </Popover>
       ) : null}
       {/* Filter Category */}
-      <Button type="submit" className="w-[100px]">
+      <Button
+        type="submit"
+        className="w-3/4 sm:w-[100px] md:w-[150px]"
+        onClick={() => onSearch?.(searchValue, categoryValue)}
+      >
         Search
         <SearchIcon className="h-9" />
       </Button>
