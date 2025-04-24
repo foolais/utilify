@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { HTMLAttributes } from "react";
 
 const titleVariants = cva("font-semibold tracking-wide", {
   variants: {
@@ -14,9 +15,10 @@ const titleVariants = cva("font-semibold tracking-wide", {
   },
 });
 
-type TitleProps = {
-  className?: string;
-} & VariantProps<typeof titleVariants>;
+type TitleProps = HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof titleVariants> & {
+    className?: string;
+  };
 
 const Title = ({ className, size }: TitleProps) => {
   return (

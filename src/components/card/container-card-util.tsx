@@ -59,6 +59,11 @@ const ContainerCardUtil = ({ data }: { data: iCardUtil[] }) => {
         className="py-6"
         categories={categoriesData}
       />
+      {filteredData.length === 0 && (
+        <div className="flex h-full w-full items-center justify-center">
+          <p className="text-xl font-bold">Data Not Found</p>
+        </div>
+      )}
       <div className="grid max-h-[700px] grid-cols-2 gap-4 overflow-y-auto md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {filteredData.map((item, index) => (
           <CardUtil
