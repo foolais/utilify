@@ -1,10 +1,6 @@
 "use client";
 
 import FormSearch from "@/components/form/form-search";
-import { Button } from "../ui/button";
-import { PlusIcon } from "lucide-react";
-import { useSidebar } from "../ui/sidebar";
-import { cn } from "@/lib/utils";
 
 interface CategoryOption {
   value: string;
@@ -13,12 +9,13 @@ interface CategoryOption {
 
 interface ContainerSearchFormProps {
   categoriesData: CategoryOption[];
+  children?: React.ReactNode;
 }
 
-const ContainerSearchForm = ({ categoriesData }: ContainerSearchFormProps) => {
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
-
+const ContainerSearchForm = ({
+  categoriesData,
+  children,
+}: ContainerSearchFormProps) => {
   const handleSearch = (search: string, category: string) => {
     console.log(search, category);
   };
@@ -32,14 +29,7 @@ const ContainerSearchForm = ({ categoriesData }: ContainerSearchFormProps) => {
         categories={categoriesData}
         widthInput="w-3/4 sm:w-[200px] lg:w-[250px]"
       />
-      <Button className="flex-center w-3/4 gap-1 sm:w-auto">
-        <PlusIcon />
-        <span
-          className={cn(isCollapsed ? "block" : "block md:hidden lg:block")}
-        >
-          Add
-        </span>
-      </Button>
+      {children}
     </div>
   );
 };

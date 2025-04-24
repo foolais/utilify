@@ -1,4 +1,5 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
+import DialogCreateTools from "@/components/dialog/dialog-create-tools";
 import { DataTable } from "@/components/table/data-table";
 import { toolsColumns } from "@/components/table/tools-colums";
 
@@ -151,7 +152,9 @@ const categoriesData = [
 const AdminToolsPage = () => {
   return (
     <div>
-      <ContainerSearchForm categoriesData={categoriesData} />
+      <ContainerSearchForm categoriesData={categoriesData}>
+        <DialogCreateTools />
+      </ContainerSearchForm>
       <DataTable columns={toolsColumns} data={toolsData} />
     </div>
   );
