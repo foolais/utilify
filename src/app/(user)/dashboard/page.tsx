@@ -105,7 +105,7 @@ const dummyData = [
 
 const DashboardPage = () => {
   return (
-    <div className="w-full">
+    <div className="px-6">
       <ContainerCardUtil data={dummyData} />
     </div>
   );

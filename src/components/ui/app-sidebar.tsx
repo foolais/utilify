@@ -52,7 +52,7 @@ export function AppSidebar() {
           />
         </div>
       </SidebarHeader>
-      <SidebarContent className={isCollapsed ? "" : "px-2"}>
+      <SidebarContent className={cn(isCollapsed ? "" : "px-2", "py-3")}>
         <SidebarMenu
           className={cn(
             isCollapsed ? "item-center flex justify-center" : "items-start",

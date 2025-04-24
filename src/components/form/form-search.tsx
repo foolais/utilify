@@ -41,7 +41,7 @@ const FormSearch = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center gap-4 py-6 sm:flex-row",
+        "flex w-full flex-col items-center gap-4 py-6 sm:flex-row md:gap-2 lg:gap-4",
         className,
       )}
     >

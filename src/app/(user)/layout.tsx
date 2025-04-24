@@ -4,7 +4,7 @@ import UserAvatar from "@/components/ui/user-avatar";
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-dvh w-screen p-8">
+    <div className="h-dvh w-screen p-4">
       <div className="flex items-center justify-between">
         <Title size="lg" />
         <UserNav />
