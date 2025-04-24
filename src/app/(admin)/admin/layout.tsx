@@ -12,7 +12,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <SidebarTrigger />
             <UserAvatar />
           </div>
-          {children}
+          <div className="px-2">{children}</div>
         </main>
       </SidebarProvider>
     </div>

@@ -24,6 +24,7 @@ interface iFormSearch {
   isFilterCategory?: boolean;
   onSearch: (searchValue: string, categoryValue: string) => void;
   categories?: CategoryOption[];
+  widthInput?: string;
 }
 
 const FormSearch = ({
@@ -31,6 +32,7 @@ const FormSearch = ({
   isFilterCategory,
   categories,
   onSearch,
+  widthInput,
 }: iFormSearch) => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -39,14 +41,14 @@ const FormSearch = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center justify-center gap-4 sm:flex-row",
+        "flex w-full flex-col items-center gap-4 py-6 sm:flex-row",
         className,
       )}
     >
       <Input
         type="text"
         placeholder="Search Here..."
-        className="w-3/4 sm:w-[300px] md:w-[400px]"
+        className={widthInput}
         onChange={(e) => setSearchValue(e.target.value)}
         value={searchValue}
       />
@@ -58,7 +60,7 @@ const FormSearch = ({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-3/4 justify-between sm:w-[200px] md:w-[300px]"
+              className={cn("justify-between", widthInput)}
             >
               {categoryValue ? (
                 categories.find((data) => data.value === categoryValue)?.label
@@ -68,7 +70,7 @@ const FormSearch = ({
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-3/4 p-0 sm:w-[200px] md:w-[300px]">
+          <PopoverContent className={cn("p-0", widthInput)}>
             <Command>
               <CommandInput placeholder="Search category..." className="h-9" />
               <CommandList>
@@ -104,7 +106,7 @@ const FormSearch = ({
       {/* Filter Category */}
       <Button
         type="submit"
-        className="w-3/4 sm:w-[100px] md:w-[150px]"
+        className="w-3/4 sm:w-[100px]"
         onClick={() => onSearch?.(searchValue, categoryValue)}
       >
         Search

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FormSearch from "../form/form-search";
-import CardUtil from "./card-util";
+import CardUtil from "../card/card-util";
 
 interface iCardUtil {
   name: string;
@@ -56,8 +56,9 @@ const ContainerCardUtil = ({ data }: { data: iCardUtil[] }) => {
       <FormSearch
         isFilterCategory
         onSearch={handleSearch}
-        className="py-6"
+        className="justify-center"
         categories={categoriesData}
+        widthInput="w-3/4 sm:w-[250px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
       />
       {filteredData.length === 0 && (
         <div className="flex h-full w-full items-center justify-center">

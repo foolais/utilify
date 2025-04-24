@@ -1,4 +1,4 @@
-import ContainerCardUtil from "@/components/card/container-card-util";
+import ContainerCardUtil from "@/components/container/container-card-util";
 
 const dummyData = [
   {
