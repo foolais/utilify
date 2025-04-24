@@ -26,8 +26,8 @@ const items = [
     icon: WrenchIcon,
   },
   {
-    title: "Borrowers",
-    url: "/admin/borrowers",
+    title: "Loans",
+    url: "/admin/loans",
     icon: Users,
   },
 ];
@@ -62,7 +62,7 @@ export function AppSidebar() {
           {items.map((item) => (
             <SidebarMenuItem
               key={item.title}
-              className={isCollapsed ? "" : "mx-auto w-full"}
+              className={isCollapsed ? "mx-auto" : "mx-auto w-full"}
             >
               <SidebarMenuButton asChild>
                 <a href={item.url}>
@@ -74,12 +74,14 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className={isCollapsed ? "" : "p-2"}>
-        <SidebarMenu>
-          <SidebarMenuItem>
+      <SidebarFooter className="my-2">
+        <SidebarMenu className={isCollapsed ? "" : "px-2"}>
+          <SidebarMenuItem
+            className={cn("flex", isCollapsed ? "mx-auto" : "justify-start")}
+          >
             <SidebarMenuButton className="cursor-pointer">
               <LogOutIcon color="red" />
-              <span className="text-red-500">Logout</span>
+              <span className={isCollapsed ? "hidden" : ""}>Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
