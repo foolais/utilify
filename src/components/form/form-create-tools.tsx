@@ -1,9 +1,10 @@
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { FormFieldCombobox, FormFieldInput } from "./form-field";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { createTools } from "@/lib/actions/actions-tools";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 interface iFormCreateTool {
   name: string;
@@ -39,11 +40,14 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   const [statusValue, setStatusValue] = useState("");
 
   const [state, formAction, isPending] = useActionState(createTools, null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
     console.log({ state });
-    if (state?.success && state?.message) {
+    if (!hasRun.current && state?.success && state?.message) {
+      toast(state.message);
       onCloseDialog();
+      hasRun.current = true;
     }
   }, [state, onCloseDialog]);
 
