@@ -5,15 +5,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import FormDetailTools from "../form/tools/form-detail-tools";
 
-const DialogDetailTools = ({
-  isOpen,
-  onClose,
-}: {
+interface DialogFormProps {
   isOpen: boolean;
   onClose: () => void;
-}) => {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}
+
+const DialogForm = ({
+  isOpen,
+  onClose,
+  title,
+  description,
+  children,
+}: DialogFormProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -23,13 +30,13 @@ const DialogDetailTools = ({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Detail tools</DialogTitle>
-          <DialogDescription>Below is the detail tools.</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <FormDetailTools />
+        {children}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DialogDetailTools;
+export default DialogForm;

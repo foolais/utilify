@@ -10,12 +10,15 @@ import {
 import { Button } from "../ui/button";
 import { InfoIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import DialogDetailLoans from "../dialog/loans/dialog-detail-loans";
-import DialogUpdateLoans from "../dialog/loans/dialog-update-loans";
+import DialogForm from "../dialog/dialog-form";
+import FormDetailLoans from "../form/loans/form-detail-loans";
+import FormUpdateLoans from "../form/loans/form-update-loans";
 
 const TableActionLoans = ({ index }: { index: number }) => {
-  const [isOpenDetail, setIsOpenDetail] = useState(false);
-  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+  const [openStatus, setOpenStatus] = useState({
+    value: false,
+    type: "",
+  });
 
   return (
     <>
@@ -29,14 +32,14 @@ const TableActionLoans = ({ index }: { index: number }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions {index + 1}</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => setIsOpenDetail(true)}
+            onClick={() => setOpenStatus({ value: true, type: "detail" })}
             className="cursor-pointer"
           >
             <InfoIcon />
             Details
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => setIsOpenUpdate(true)}
+            onClick={() => setOpenStatus({ value: true, type: "update" })}
             className="cursor-pointer"
           >
             <PencilIcon />
@@ -48,16 +51,22 @@ const TableActionLoans = ({ index }: { index: number }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <>
-        <DialogDetailLoans
-          isOpen={isOpenDetail}
-          onClose={() => setIsOpenDetail(false)}
-        />
-        <DialogUpdateLoans
-          isOpen={isOpenUpdate}
-          onClose={() => setIsOpenUpdate(false)}
-        />
-      </>
+      <DialogForm
+        isOpen={openStatus.value}
+        onClose={() => setOpenStatus({ value: false, type: "" })}
+        title={openStatus.type === "detail" ? "Detail Loans" : "Update Loans"}
+        description={
+          openStatus.type === "detail" ? "Detail Loans" : "Update Loans"
+        }
+      >
+        {openStatus.type === "detail" ? (
+          <FormDetailLoans />
+        ) : openStatus.type === "update" ? (
+          <FormUpdateLoans
+            onCloseDialog={() => setOpenStatus({ value: false, type: "" })}
+          />
+        ) : null}
+      </DialogForm>
     </>
   );
 };

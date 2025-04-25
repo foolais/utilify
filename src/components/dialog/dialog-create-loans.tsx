@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
-import { useSidebar } from "../../ui/sidebar";
 import { useState } from "react";
-import FormCreateLoans from "../../form/loans/form-create-loans";
+import { useSidebar } from "../ui/sidebar";
+import FormCreateLoans from "../form/loans/form-create-loans";
 
 const DialogCreateLoans = () => {
   const { state } = useSidebar();
