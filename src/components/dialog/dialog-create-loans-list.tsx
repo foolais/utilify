@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useSidebar } from "../ui/sidebar";
-import FormCreateLoans from "../form/loans/form-create-loans";
+import FormCreateLoansList from "../form/loans-list/form-create-loans-list";
 
-const DialogCreateLoans = () => {
+const DialogCreateLoansList = () => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
@@ -43,10 +43,10 @@ const DialogCreateLoans = () => {
           <DialogTitle>Add new loans</DialogTitle>
           <DialogDescription>Create a new loan.</DialogDescription>
         </DialogHeader>
-        <FormCreateLoans onCloseDialog={() => setOpen(false)} />
+        <FormCreateLoansList onCloseDialog={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DialogCreateLoans;
+export default DialogCreateLoansList;

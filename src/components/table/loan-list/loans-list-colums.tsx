@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import TableActionLoans from "./table-actions-loans";
 
-export type Loans = {
+export type LoansList = {
   id: string;
   email: string;
   tools: string;
@@ -14,7 +14,7 @@ export type Loans = {
   status: "borrowed" | "returned" | "overdue";
 };
 
-export const loansColumns: ColumnDef<Loans>[] = [
+export const loansListColumns: ColumnDef<LoansList>[] = [
   {
     accessorKey: "no",
     header: "No",

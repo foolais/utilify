@@ -1,6 +1,6 @@
 import { object, string } from "zod";
 
-export const LoansSchema = object({
+export const LoansListSchema = object({
   email: string().email("Invalid email"),
   tools: string().nonempty("Tools is required"),
   loan_date: string().nonempty("Loan Date is required"),

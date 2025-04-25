@@ -6,13 +6,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+} from "../../ui/dropdown-menu";
+import { Button } from "../../ui/button";
 import { InfoIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import DialogForm from "../dialog/dialog-form";
-import FormDetailLoans from "../form/loans/form-detail-loans";
-import FormUpdateLoans from "../form/loans/form-update-loans";
+import DialogForm from "../../dialog/dialog-form";
+import FormDetailLoansList from "../../form/loans-list/form-detail-loans-list";
+import FormUpdateLoansList from "../../form/loans-list/form-update-loans-list";
 
 const TableActionLoans = ({ index }: { index: number }) => {
   const [openStatus, setOpenStatus] = useState({
@@ -60,9 +60,9 @@ const TableActionLoans = ({ index }: { index: number }) => {
         }
       >
         {openStatus.type === "detail" ? (
-          <FormDetailLoans />
+          <FormDetailLoansList />
         ) : openStatus.type === "update" ? (
-          <FormUpdateLoans
+          <FormUpdateLoansList
             onCloseDialog={() => setOpenStatus({ value: false, type: "" })}
           />
         ) : null}

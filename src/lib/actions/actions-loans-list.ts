@@ -1,9 +1,12 @@
 "use server";
 
-import { LoansSchema } from "../zod/zod-loans";
+import { LoansListSchema } from "../zod/zod-loans-list";
 
-export const createLoans = async (prevState: unknown, formData: FormData) => {
-  const validatedFields = LoansSchema.safeParse(
+export const createLoansList = async (
+  prevState: unknown,
+  formData: FormData,
+) => {
+  const validatedFields = LoansListSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
 
@@ -17,11 +20,14 @@ export const createLoans = async (prevState: unknown, formData: FormData) => {
 
   console.log({ email, tools, loan_date, return_date, status });
 
-  return { success: true, message: "Tools created successfully" };
+  return { success: true, message: "Loans created successfully" };
 };
 
-export const updateLoans = async (prevState: unknown, formData: FormData) => {
-  const validatedFields = LoansSchema.safeParse(
+export const updateLoansList = async (
+  prevState: unknown,
+  formData: FormData,
+) => {
+  const validatedFields = LoansListSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
 
@@ -35,5 +41,5 @@ export const updateLoans = async (prevState: unknown, formData: FormData) => {
 
   console.log({ email, tools, loan_date, return_date, status });
 
-  return { success: true, message: "Tools created successfully" };
+  return { success: true, message: "Loans updated successfully" };
 };

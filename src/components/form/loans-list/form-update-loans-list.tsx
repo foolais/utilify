@@ -1,7 +1,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { FormFieldCombobox, FormFieldInput } from "../form-field";
-import { updateLoans } from "@/lib/actions/actions-loans";
+import { updateLoansList } from "@/lib/actions/actions-loans-list";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -37,7 +37,11 @@ const toolsData = [
   { value: "Printer", label: "Printer" },
 ];
 
-const FormUpdateLoans = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
+const FormUpdateLoansList = ({
+  onCloseDialog,
+}: {
+  onCloseDialog: () => void;
+}) => {
   const [formValues, setFormValues] = useState<iFormLoans>({
     email: "",
     tools: "",
@@ -51,7 +55,7 @@ const FormUpdateLoans = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   const [loanDate, setLoanDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
 
-  const [state, formAction, isPending] = useActionState(updateLoans, null);
+  const [state, formAction, isPending] = useActionState(updateLoansList, null);
   const hasRun = useRef(false);
 
   useEffect(() => {
@@ -196,4 +200,4 @@ const FormUpdateLoans = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   );
 };
 
-export default FormUpdateLoans;
+export default FormUpdateLoansList;

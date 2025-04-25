@@ -10,7 +10,7 @@ interface iFormLoans {
   status: string;
 }
 
-const FormDetailLoans = () => {
+const FormDetailLoansList = () => {
   const [formValues, setFormValues] = useState<iFormLoans>({
     email: "",
     tools: "",
@@ -72,4 +72,4 @@ const FormDetailLoans = () => {
   );
 };
 
-export default FormDetailLoans;
+export default FormDetailLoansList;

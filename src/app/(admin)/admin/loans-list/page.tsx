@@ -1,9 +1,9 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
-import DialogCreateLoans from "@/components/dialog/dialog-create-loans";
+import DialogCreateLoansList from "@/components/dialog/dialog-create-loans-list";
 import { DataTable } from "@/components/table/data-table";
-import { loansColumns } from "@/components/table/loans-colums";
+import { loansListColumns } from "@/components/table/loan-list/loans-list-colums";
 
-const loansData = [
+const loansListData = [
   {
     id: "1",
     no: "1",
@@ -160,9 +160,9 @@ const AdminBorrowersPage = () => {
   return (
     <div>
       <ContainerSearchForm categoriesData={categoriesData}>
-        <DialogCreateLoans />
+        <DialogCreateLoansList />
       </ContainerSearchForm>
-      <DataTable columns={loansColumns} data={loansData} />
+      <DataTable columns={loansListColumns} data={loansListData} />
     </div>
   );
 };
