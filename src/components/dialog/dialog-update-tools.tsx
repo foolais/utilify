@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import FormCreateTools from "../form/form-create-tools";
+import FormUpdateTools from "../form/tools/form-update-tools";
 
 const DialogUpdateTools = ({
   isOpen,
@@ -30,7 +30,7 @@ const DialogUpdateTools = ({
             Make changes to your tools here.
           </DialogDescription>
         </DialogHeader>
-        <FormCreateTools onCloseDialog={onClose} />
+        <FormUpdateTools onCloseDialog={onClose} />
       </DialogContent>
     </Dialog>
   );

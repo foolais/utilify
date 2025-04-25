@@ -1,12 +1,12 @@
 import { useActionState, useEffect, useRef, useState } from "react";
-import { FormFieldCombobox, FormFieldInput } from "./form-field";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { createTools } from "@/lib/actions/actions-tools";
-import { Button } from "../ui/button";
+import { FormFieldCombobox, FormFieldInput } from "../form-field";
+import { Label } from "../../ui/label";
+import { Textarea } from "../../ui/textarea";
+import { updateTools } from "@/lib/actions/actions-tools";
+import { Button } from "../../ui/button";
 import { toast } from "sonner";
 
-interface iFormCreateTool {
+interface iFormUpdateTools {
   name: string;
   description: string;
   category: string;
@@ -28,8 +28,8 @@ const statusData = [
   { value: "overdue", label: "Overdue" },
 ];
 
-const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
-  const [formValues, setFormValues] = useState<iFormCreateTool>({
+const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
+  const [formValues, setFormValues] = useState<iFormUpdateTools>({
     name: "",
     description: "",
     category: "",
@@ -39,7 +39,7 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   const [categoryValue, setCategoryValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
 
-  const [state, formAction, isPending] = useActionState(createTools, null);
+  const [state, formAction, isPending] = useActionState(updateTools, null);
   const hasRun = useRef(false);
 
   useEffect(() => {
@@ -125,4 +125,4 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   );
 };
 
-export default FormCreateTools;
+export default FormUpdateTools;
