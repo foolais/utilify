@@ -8,6 +8,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, LogOutIcon, Users, WrenchIcon } from "lucide-react";
@@ -29,6 +31,16 @@ const items = [
     title: "Loans",
     url: "/admin/loans",
     icon: Users,
+    sub: [
+      {
+        title: "Request",
+        url: "/admin/loans-request",
+      },
+      {
+        title: "List",
+        url: "/admin/loans-list",
+      },
+    ],
   },
 ];
 
@@ -64,12 +76,34 @@ export function AppSidebar() {
               key={item.title}
               className={isCollapsed ? "mx-auto" : "mx-auto w-full"}
             >
-              <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <item.icon size={isCollapsed ? 20 : 24} />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
+              {Array.isArray(item.sub) && item.sub.length > 0 ? (
+                <>
+                  <SidebarMenuButton asChild>
+                    <div className="flex">
+                      <item.icon size={isCollapsed ? 20 : 24} />
+                      <span>{item.title}</span>
+                    </div>
+                  </SidebarMenuButton>
+                  <SidebarMenuSub>
+                    {item.sub.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuButton asChild>
+                          <a href={subItem.url}>
+                            <span>{subItem.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </>
+              ) : (
+                <SidebarMenuButton asChild>
+                  <a href={item.url}>
+                    <item.icon size={isCollapsed ? 20 : 24} />
+                    <span>{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              )}
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
