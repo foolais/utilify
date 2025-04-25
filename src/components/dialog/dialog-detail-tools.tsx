@@ -28,7 +28,7 @@ const DialogDetailTools = ({
           <DialogTitle>Detail tools</DialogTitle>
           <DialogDescription>Below is the detail tools.</DialogDescription>
         </DialogHeader>
-        <FormDetailTools onCloseDialog={onClose} />
+        <FormDetailTools />
       </DialogContent>
     </Dialog>
   );

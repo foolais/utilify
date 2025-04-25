@@ -1,10 +1,7 @@
-import { useActionState, useEffect, useRef, useState } from "react";
-import { FormFieldCombobox, FormFieldInput } from "../form-field";
+import { useState } from "react";
+import { FormFieldInput } from "../form-field";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import { createTools } from "@/lib/actions/actions-tools";
-import { Button } from "../../ui/button";
-import { toast } from "sonner";
 
 interface iFormDetailTool {
   name: string;
@@ -13,22 +10,7 @@ interface iFormDetailTool {
   status: string;
 }
 
-const categoriesData = [
-  { value: "management", label: "Management" },
-  { value: "analytics", label: "Analytics" },
-  { value: "service", label: "Service" },
-  { value: "finance", label: "Finance" },
-  { value: "hr", label: "HR" },
-];
-
-const statusData = [
-  { value: "available", label: "Available" },
-  { value: "borrowed", label: "Borrowed" },
-  { value: "returned", label: "Returned" },
-  { value: "overdue", label: "Overdue" },
-];
-
-const FormDetailTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
+const FormDetailTools = () => {
   const [formValues, setFormValues] = useState<iFormDetailTool>({
     name: "",
     description: "",
@@ -36,90 +18,42 @@ const FormDetailTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
     status: "",
   });
 
-  const [categoryValue, setCategoryValue] = useState("");
-  const [statusValue, setStatusValue] = useState("");
-
-  const [state, formAction, isPending] = useActionState(createTools, null);
-  const hasRun = useRef(false);
-
-  useEffect(() => {
-    console.log({ state });
-    if (!hasRun.current && state?.success && state?.message) {
-      toast(state.message);
-      onCloseDialog();
-      hasRun.current = true;
-    }
-  }, [state, onCloseDialog]);
-
   return (
-    <form id="form-create-tools" action={formAction}>
+    <form id="form-create-tools">
       <div className="grid w-full items-center gap-4">
         <FormFieldInput
           name="name"
           label="Name"
           value={formValues.name}
           setFormValues={setFormValues}
-          error={state?.error && "name" in state.error ? state.error.name : []}
-          placeholder="Enter name..."
+          placeholder="Name"
+          disabled
         />
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="description">Description</Label>
           <Textarea
             id="description"
-            placeholder="Enter description..."
+            placeholder="Description"
             value={formValues.description}
-            onChange={(e) =>
-              setFormValues((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }))
-            }
+            disabled
           />
-          {state?.error &&
-          "description" in state.error &&
-          state.error.description ? (
-            <div aria-live="polite" aria-atomic="true">
-              <span className="error-message">
-                {state.error.description.join(" & ")}
-              </span>
-            </div>
-          ) : null}
         </div>
-        <FormFieldCombobox
+        <FormFieldInput
           name="category"
           label="Category"
-          placeholder="Select category"
-          data={categoriesData}
-          value={categoryValue}
-          setValue={setCategoryValue}
-          onChangeForm={(val) =>
-            setFormValues((prev) => ({ ...prev, category: val }))
-          }
-          error={
-            state?.error && "category" in state.error
-              ? state.error.category
-              : []
-          }
+          value={formValues.category}
+          setFormValues={setFormValues}
+          placeholder="Category"
+          disabled
         />
-        <FormFieldCombobox
+        <FormFieldInput
           name="status"
           label="Status"
-          placeholder="Select status"
-          data={statusData}
-          value={statusValue}
-          setValue={setStatusValue}
-          onChangeForm={(val) =>
-            setFormValues((prev) => ({ ...prev, status: val }))
-          }
-          error={
-            state?.error && "status" in state.error ? state.error.status : []
-          }
+          value={formValues.status}
+          setFormValues={setFormValues}
+          placeholder="Status"
+          disabled
         />
-      </div>
-      <div className="mt-4 flex items-center justify-end">
-        <Button disabled={isPending} form="form-create-tools">
-          Create
-        </Button>
       </div>
     </form>
   );
