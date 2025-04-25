@@ -1,10 +1,11 @@
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { FormFieldCombobox, FormFieldInput } from "./form-field";
-import { registerCredentials } from "@/lib/actions/actions-auth";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { createTools } from "@/lib/actions/actions-tools";
+import { Button } from "../ui/button";
 
-interface iFormRegister {
+interface iFormCreateTool {
   name: string;
   description: string;
   category: string;
@@ -26,8 +27,8 @@ const statusData = [
   { value: "overdue", label: "Overdue" },
 ];
 
-const FormCreateTools = () => {
-  const [formValues, setFormValues] = useState<iFormRegister>({
+const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
+  const [formValues, setFormValues] = useState<iFormCreateTool>({
     name: "",
     description: "",
     category: "",
@@ -37,13 +38,17 @@ const FormCreateTools = () => {
   const [categoryValue, setCategoryValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
 
-  const [state, formAction, isPending] = useActionState(
-    registerCredentials,
-    null,
-  );
+  const [state, formAction, isPending] = useActionState(createTools, null);
+
+  useEffect(() => {
+    console.log({ state });
+    if (state?.success && state?.message) {
+      onCloseDialog();
+    }
+  }, [state, onCloseDialog]);
 
   return (
-    <form>
+    <form id="form-create-tools" action={formAction}>
       <div className="grid w-full items-center gap-4">
         <FormFieldInput
           name="name"
@@ -66,8 +71,18 @@ const FormCreateTools = () => {
               }))
             }
           />
+          {state?.error &&
+          "description" in state.error &&
+          state.error.description ? (
+            <div aria-live="polite" aria-atomic="true">
+              <span className="error-message">
+                {state.error.description.join(" & ")}
+              </span>
+            </div>
+          ) : null}
         </div>
         <FormFieldCombobox
+          name="category"
           label="Category"
           placeholder="Select category"
           data={categoriesData}
@@ -76,8 +91,14 @@ const FormCreateTools = () => {
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, category: val }))
           }
+          error={
+            state?.error && "category" in state.error
+              ? state.error.category
+              : []
+          }
         />
         <FormFieldCombobox
+          name="status"
           label="Status"
           placeholder="Select status"
           data={statusData}
@@ -86,7 +107,15 @@ const FormCreateTools = () => {
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, status: val }))
           }
+          error={
+            state?.error && "status" in state.error ? state.error.status : []
+          }
         />
+      </div>
+      <div className="mt-4 flex items-center justify-end">
+        <Button disabled={isPending} form="form-create-tools">
+          Create
+        </Button>
       </div>
     </form>
   );

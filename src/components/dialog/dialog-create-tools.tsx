@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -14,13 +13,16 @@ import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
 import FormCreateTools from "../form/form-create-tools";
+import { useState } from "react";
 
 const DialogCreateTools = () => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="flex-center w-3/4 gap-1 sm:w-auto">
           <PlusIcon />
@@ -43,10 +45,7 @@ const DialogCreateTools = () => {
             Make changes to your profile here.
           </DialogDescription>
         </DialogHeader>
-        <FormCreateTools />
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+        <FormCreateTools onCloseDialog={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

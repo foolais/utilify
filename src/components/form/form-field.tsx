@@ -60,27 +60,32 @@ type SelectData = {
 };
 
 interface ComboboxProps {
+  name: string;
   label: string;
   placeholder: string;
   data: SelectData[];
   value: string;
   setValue: (value: string) => void;
   onChangeForm: (value: string) => void;
+  error?: string[];
 }
 
 export const FormFieldCombobox = ({
+  name,
   label,
   placeholder,
   data,
   value,
   setValue,
   onChangeForm,
+  error,
 }: ComboboxProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="flex w-full flex-col space-y-1.5">
       <Label>{label}</Label>
+      <input type="hidden" name={name} value={value} />
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -107,6 +112,7 @@ export const FormFieldCombobox = ({
               <CommandEmpty>No {label.toLowerCase()} found.</CommandEmpty>
               {data.map((item) => (
                 <CommandItem
+                  id={name as string}
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
@@ -130,6 +136,11 @@ export const FormFieldCombobox = ({
           </Command>
         </PopoverContent>
       </Popover>
+      {error && (
+        <div aria-live="polite" aria-atomic="true">
+          <span className="error-message">{error.join(" & ")}</span>
+        </div>
+      )}
     </div>
   );
 };
