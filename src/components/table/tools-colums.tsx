@@ -3,6 +3,15 @@
 import { Badge } from "@/components/ui/badge";
 import { truncateText } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { InfoIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
+import { Button } from "../ui/button";
 
 export type Tools = {
   id: string;
@@ -50,6 +59,37 @@ export const toolsColumns: ColumnDef<Tools>[] = [
         <div className="flex-center mx-auto">
           <Badge className="mx-auto">{status}</Badge>
         </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions {row.index + 1}</DropdownMenuLabel>
+            <DropdownMenuItem className="cursor-pointer">
+              <InfoIcon />
+              Details
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <PencilIcon />
+              Update
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive cursor-pointer">
+              <Trash2Icon color="red" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },
