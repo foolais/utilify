@@ -20,7 +20,7 @@ interface iPropsInput<T> extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string[];
   value: string;
-  setFormValues: React.Dispatch<React.SetStateAction<T>>;
+  setFormValues?: React.Dispatch<React.SetStateAction<T>>;
 }
 
 export const FormFieldInput = <T,>({
@@ -32,7 +32,7 @@ export const FormFieldInput = <T,>({
   ...rest
 }: iPropsInput<T>) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues((prev) => ({ ...prev, [name]: e.target.value }));
+    setFormValues?.((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
   return (

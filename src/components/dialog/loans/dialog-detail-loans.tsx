@@ -1,13 +1,13 @@
+import FormDetailLoans from "@/components/form/loans/form-detail-loans";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import FormDetailTools from "../form/tools/form-detail-tools";
+} from "@/components/ui/dialog";
 
-const DialogDetailTools = ({
+const DialogDetailLoans = ({
   isOpen,
   onClose,
 }: {
@@ -26,10 +26,10 @@ const DialogDetailTools = ({
           <DialogTitle>Detail tools</DialogTitle>
           <DialogDescription>Below is the detail tools.</DialogDescription>
         </DialogHeader>
-        <FormDetailTools />
+        <FormDetailLoans />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DialogDetailTools;
+export default DialogDetailLoans;

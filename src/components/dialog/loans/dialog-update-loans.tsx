@@ -1,13 +1,13 @@
+import FormUpdateLoans from "@/components/form/loans/form-update-loans";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import FormDetailTools from "../form/tools/form-detail-tools";
+} from "@/components/ui/dialog";
 
-const DialogDetailTools = ({
+const DialogUpdateLoans = ({
   isOpen,
   onClose,
 }: {
@@ -23,13 +23,15 @@ const DialogDetailTools = ({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Detail tools</DialogTitle>
-          <DialogDescription>Below is the detail tools.</DialogDescription>
+          <DialogTitle>Update tools</DialogTitle>
+          <DialogDescription>
+            Make changes to your tools here.
+          </DialogDescription>
         </DialogHeader>
-        <FormDetailTools />
+        <FormUpdateLoans onCloseDialog={onClose} />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DialogDetailTools;
+export default DialogUpdateLoans;

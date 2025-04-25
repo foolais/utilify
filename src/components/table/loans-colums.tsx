@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
+import TableActionLoans from "./table-actions-loans";
 
 export type Loans = {
   id: string;
@@ -52,6 +53,13 @@ export const loansColumns: ColumnDef<Loans>[] = [
           <Badge className="mx-auto">{status}</Badge>
         </div>
       );
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return <TableActionLoans index={row.index} />;
     },
   },
 ];

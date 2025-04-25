@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormFieldInput } from "../form-field";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
@@ -18,6 +18,15 @@ const FormDetailTools = () => {
     status: "",
   });
 
+  useEffect(() => {
+    setFormValues({
+      name: "Project Tracker",
+      description: "Tool for managing project milestones and deadlines.",
+      category: "management",
+      status: "available",
+    });
+  }, []);
+
   return (
     <form id="form-create-tools">
       <div className="grid w-full items-center gap-4">
@@ -25,7 +34,6 @@ const FormDetailTools = () => {
           name="name"
           label="Name"
           value={formValues.name}
-          setFormValues={setFormValues}
           placeholder="Name"
           disabled
         />
@@ -42,7 +50,6 @@ const FormDetailTools = () => {
           name="category"
           label="Category"
           value={formValues.category}
-          setFormValues={setFormValues}
           placeholder="Category"
           disabled
         />
@@ -50,7 +57,6 @@ const FormDetailTools = () => {
           name="status"
           label="Status"
           value={formValues.status}
-          setFormValues={setFormValues}
           placeholder="Status"
           disabled
         />
