@@ -30,7 +30,7 @@ const TableActionLoans = ({ index }: { index: number }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions {index + 1}</DropdownMenuLabel>
+          <DropdownMenuLabel>Actions for No {index + 1}</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => setOpenStatus({ value: true, type: "detail" })}
             className="cursor-pointer"

@@ -8,13 +8,15 @@ interface CategoryOption {
 }
 
 interface ContainerSearchFormProps {
-  categoriesData: CategoryOption[];
+  categoriesData?: CategoryOption[];
   children?: React.ReactNode;
+  widthClassName?: string;
 }
 
 const ContainerSearchForm = ({
   categoriesData,
   children,
+  widthClassName = "w-3/4 sm:w-[200px] lg:w-[250px]",
 }: ContainerSearchFormProps) => {
   const handleSearch = (search: string, category: string) => {
     console.log(search, category);
@@ -27,7 +29,7 @@ const ContainerSearchForm = ({
         onSearch={handleSearch}
         className="w-full justify-center py-2 sm:w-max md:w-full md:justify-start"
         categories={categoriesData}
-        widthInput="w-3/4 sm:w-[200px] lg:w-[250px]"
+        widthInput={widthClassName}
       />
       {children}
     </div>
