@@ -3,6 +3,16 @@ import { toast } from "sonner";
 import { FormFieldCombobox, FormFieldInput } from "../form-field";
 import { createLoans } from "@/lib/actions/actions-loans";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import moment from "moment";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 interface iFormLoans {
   email: string;
@@ -38,6 +48,8 @@ const FormCreateLoans = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
 
   const [toolsValue, setToolsValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
+  const [loanDate, setLoanDate] = useState<Date>();
+  const [returnDate, setReturnDate] = useState<Date>();
 
   const [state, formAction, isPending] = useActionState(createLoans, null);
   const hasRun = useRef(false);
@@ -78,6 +90,70 @@ const FormCreateLoans = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
             state?.error && "tools" in state.error ? state.error.tools : []
           }
         />
+        <div className="flex w-full flex-col space-y-1.5">
+          <Label>Loan Date</Label>
+          <input type="hidden" name="loan_date" value={loanDate?.toString()} />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !loanDate && "text-muted-foreground",
+                )}
+              >
+                <CalendarIcon />
+                {loanDate ? (
+                  moment(loanDate).format("L")
+                ) : (
+                  <span>Pick a loan date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={loanDate}
+                onSelect={setLoanDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="flex w-full flex-col space-y-1.5">
+          <Label>Return Date</Label>
+          <input
+            type="hidden"
+            name="return_date"
+            value={returnDate?.toString()}
+          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !returnDate && "text-muted-foreground",
+                )}
+              >
+                <CalendarIcon />
+                {returnDate ? (
+                  moment(returnDate).format("L")
+                ) : (
+                  <span>Pick a return date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={returnDate}
+                onSelect={setReturnDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
         <FormFieldCombobox
           name="status"
           label="Status"

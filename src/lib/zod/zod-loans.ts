@@ -5,6 +5,5 @@ export const LoansSchema = object({
   tools: string().nonempty("Tools is required"),
   loan_date: string().nonempty("Loan Date is required"),
   return_date: string().nonempty("Return Date is required"),
-  category: string().nonempty("Category is required"),
   status: string().nonempty("Status is required"),
 });
