@@ -38,13 +38,90 @@ model Session {
 }
 
 model User {
-    id       String    @id @default(cuid())
-    name     String?
-    email    String?   @unique
-    password String?
-    role     String    @default("user")
-    accounts Account[]
-    sessions Session[]
+    id        String    @id @default(cuid())
+    name      String?
+    email     String?   @unique
+    password  String?
+    role      UserRole  @default(user)
+    accounts  Account[]
+    sessions  Session[]
+    createdAt DateTime  @default(now())
+
+    toolsCreated Tool[] @relation("ToolsCreatedBy")
+    toolsUpdated Tool[] @relation("ToolsUpdatedBy")
+    loanCreated  Loan[] @relation("LoanCreatedBy")
+    loanUpdated  Loan[] @relation("LoanUpdatedBy")
+
+    auditLog AuditLog[]
 
     @@map("users")
+}
+
+model Tool {
+    id          String     @id @default(cuid())
+    name        String     @unique
+    description String?
+    category    String
+    status      ToolStatus
+    created_by  String
+    updated_by  String
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+
+    createdBy User @relation("ToolsCreatedBy", fields: [created_by], references: [id])
+    updatedBy User @relation("ToolsUpdatedBy", fields: [updated_by], references: [id])
+
+    loans Loan[]
+}
+
+model Loan {
+    id          String     @id @default(cuid())
+    email       String
+    toolId      String
+    tool        Tool       @relation(fields: [toolId], references: [id])
+    loan_date   DateTime
+    return_date DateTime
+    status      LoanStatus
+    created_by  String
+    updated_by  String
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+
+    createdBy User @relation("LoanCreatedBy", fields: [created_by], references: [id])
+    updatedBy User @relation("LoanUpdatedBy", fields: [updated_by], references: [id])
+}
+
+model AuditLog {
+    id         String     @id @default(cuid())
+    userId     String
+    user       User       @relation(fields: [userId], references: [id])
+    action     String
+    targetid   String
+    targetType TargetType
+    createdAt  DateTime   @default(now())
+}
+
+enum UserRole {
+    user
+    admin
+}
+
+enum ToolStatus {
+    available
+    unavailable
+    borrowed
+    pending
+}
+
+enum LoanStatus {
+    pending
+    rejected
+    borrowed
+    returned
+    overdue
+}
+
+enum TargetType {
+    TOOL
+    LOAN
 }
