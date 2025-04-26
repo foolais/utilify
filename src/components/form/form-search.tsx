@@ -20,6 +20,7 @@ interface CategoryOption {
 }
 
 interface iFormSearch {
+  name?: string;
   className?: string;
   isFilterCategory?: boolean;
   onSearch: (searchValue: string, categoryValue: string) => void;
@@ -28,6 +29,7 @@ interface iFormSearch {
 }
 
 const FormSearch = ({
+  name = "category",
   className,
   isFilterCategory,
   categories,
@@ -65,16 +67,16 @@ const FormSearch = ({
               {categoryValue ? (
                 categories.find((data) => data.value === categoryValue)?.label
               ) : (
-                <p className="font-light">Select category</p>
+                <p className="font-light">Select {name}</p>
               )}
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className={cn("p-0", widthInput)}>
             <Command>
-              <CommandInput placeholder="Search category..." className="h-9" />
+              <CommandInput placeholder={`Search ${name}...`} className="h-9" />
               <CommandList>
-                <CommandEmpty>No category found.</CommandEmpty>
+                <CommandEmpty>No {name} found.</CommandEmpty>
                 {categories.map((data) => (
                   <CommandItem
                     key={data.value}

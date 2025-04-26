@@ -15,6 +15,7 @@ import {
 import { LayoutDashboard, LogOutIcon, Users, WrenchIcon } from "lucide-react";
 import Title from "./title";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const items = [
   {
@@ -88,9 +89,9 @@ export function AppSidebar() {
                     {item.sub.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuButton asChild>
-                          <a href={subItem.url}>
+                          <Link href={subItem.url}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuSubItem>
                     ))}
@@ -98,10 +99,10 @@ export function AppSidebar() {
                 </>
               ) : (
                 <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                  <Link href={item.url}>
                     <item.icon size={isCollapsed ? 20 : 24} />
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               )}
             </SidebarMenuItem>

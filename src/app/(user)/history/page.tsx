@@ -147,10 +147,12 @@ const historyData = [
 const HistoryPage = () => {
   return (
     <>
-      <div className="flex-center">
+      <div className="flex-center mt-4">
         <ContainerSearchForm
+          name="status"
           categoriesData={categoriesData}
-        ></ContainerSearchForm>
+          widthClassName="w-3/4 sm:w-[250px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
+        />
       </div>
       <DataTable columns={historyColumns} data={historyData} />
     </>
