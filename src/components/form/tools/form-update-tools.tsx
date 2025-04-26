@@ -2,7 +2,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { FormFieldCombobox, FormFieldInput } from "../form-field";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import { updateTools } from "@/lib/actions/actions-tools";
+import { getToolById, updateTools } from "@/lib/actions/actions-tools";
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
 
@@ -23,12 +23,18 @@ const categoriesData = [
 
 const statusData = [
   { value: "available", label: "Available" },
+  { value: "unavailable", label: "Unavailable" },
   { value: "borrowed", label: "Borrowed" },
-  { value: "returned", label: "Returned" },
-  { value: "overdue", label: "Overdue" },
+  { value: "pending", label: "Pending" },
 ];
 
-const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
+const FormUpdateTools = ({
+  onCloseDialog,
+  id,
+}: {
+  onCloseDialog: () => void;
+  id: string;
+}) => {
   const [formValues, setFormValues] = useState<iFormUpdateTools>({
     name: "",
     description: "",
@@ -36,14 +42,29 @@ const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
     status: "",
   });
 
-  const [categoryValue, setCategoryValue] = useState("");
-  const [statusValue, setStatusValue] = useState("");
-
-  const [state, formAction, isPending] = useActionState(updateTools, null);
+  const [state, formAction, isPending] = useActionState(
+    updateTools.bind(null, id),
+    null,
+  );
   const hasRun = useRef(false);
 
   useEffect(() => {
-    console.log({ state });
+    const getData = async () => {
+      const data = await getToolById(id);
+
+      if ("error" in data) return;
+      setFormValues({
+        name: data.name ?? "",
+        description: data.description ?? "",
+        category: data.category ?? "",
+        status: data.status ?? "",
+      });
+    };
+
+    getData();
+  }, [id]);
+
+  useEffect(() => {
     if (!hasRun.current && state?.success && state?.message) {
       toast(state.message);
       onCloseDialog();
@@ -90,8 +111,8 @@ const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
           label="Category"
           placeholder="Select category"
           data={categoriesData}
-          value={categoryValue}
-          setValue={setCategoryValue}
+          value={formValues.category}
+          setValue={() => setFormValues((prev) => ({ ...prev, category: "" }))}
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, category: val }))
           }
@@ -106,8 +127,8 @@ const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
           label="Status"
           placeholder="Select status"
           data={statusData}
-          value={statusValue}
-          setValue={setStatusValue}
+          value={formValues.status}
+          setValue={() => setFormValues((prev) => ({ ...prev, status: "" }))}
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, status: val }))
           }
@@ -118,7 +139,7 @@ const FormUpdateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
       </div>
       <div className="mt-4 flex items-center justify-end">
         <Button disabled={isPending} form="form-create-tools">
-          Create
+          {isPending ? "Updating..." : "Update"}
         </Button>
       </div>
     </form>

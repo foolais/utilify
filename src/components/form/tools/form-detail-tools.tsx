@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FormFieldInput } from "../form-field";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
+import { getToolById } from "@/lib/actions/actions-tools";
 
 interface iFormDetailTool {
   name: string;
@@ -10,7 +11,7 @@ interface iFormDetailTool {
   status: string;
 }
 
-const FormDetailTools = () => {
+const FormDetailTools = ({ id }: { id: string }) => {
   const [formValues, setFormValues] = useState<iFormDetailTool>({
     name: "",
     description: "",
@@ -19,13 +20,20 @@ const FormDetailTools = () => {
   });
 
   useEffect(() => {
-    setFormValues({
-      name: "Project Tracker",
-      description: "Tool for managing project milestones and deadlines.",
-      category: "management",
-      status: "available",
-    });
-  }, []);
+    const getData = async () => {
+      const data = await getToolById(id);
+
+      if ("error" in data) return;
+      setFormValues({
+        name: data.name ?? "",
+        description: data.description ?? "",
+        category: data.category ?? "",
+        status: data.status ?? "",
+      });
+    };
+
+    getData();
+  }, [id]);
 
   return (
     <form id="form-create-tools">

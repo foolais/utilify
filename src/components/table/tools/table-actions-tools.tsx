@@ -14,7 +14,7 @@ import DialogForm from "../../dialog/dialog-form";
 import FormDetailTools from "../../form/tools/form-detail-tools";
 import FormUpdateTools from "../../form/tools/form-update-tools";
 
-const TableActionTools = ({ index }: { index: number }) => {
+const TableActionTools = ({ index, id }: { index: number; id: string }) => {
   const [openStatus, setOpenStatus] = useState({
     value: false,
     type: "",
@@ -60,10 +60,11 @@ const TableActionTools = ({ index }: { index: number }) => {
         }
       >
         {openStatus.type === "detail" ? (
-          <FormDetailTools />
+          <FormDetailTools id={id} />
         ) : openStatus.type === "update" ? (
           <FormUpdateTools
             onCloseDialog={() => setOpenStatus({ value: false, type: "" })}
+            id={id}
           />
         ) : null}
       </DialogForm>

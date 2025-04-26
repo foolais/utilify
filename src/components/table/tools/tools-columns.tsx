@@ -4,9 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { truncateText } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import TableActionTools from "./table-actions-tools";
-import { Tools } from "@/types/types";
+import { ToolsColumn } from "@/types/types";
 
-export const toolsColumns: ColumnDef<Tools>[] = [
+export const toolsColumns: ColumnDef<ToolsColumn>[] = [
   {
     accessorKey: "no",
     header: "No",
@@ -51,7 +51,7 @@ export const toolsColumns: ColumnDef<Tools>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      return <TableActionTools index={row.index} />;
+      return <TableActionTools index={row.index} id={row.original.id} />;
     },
   },
 ];

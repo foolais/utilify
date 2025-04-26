@@ -118,7 +118,7 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
       </div>
       <div className="mt-4 flex items-center justify-end">
         <Button disabled={isPending} form="form-create-tools">
-          Create
+          {isPending ? "Creating..." : "create"}
         </Button>
       </div>
     </form>

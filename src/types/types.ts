@@ -1,9 +1,29 @@
-export type Tools = {
+export type ToolsColumn = {
   id: string;
   name: string;
   description: string;
   category: string;
   status: "available" | "unavailable" | "borrowed" | "pending";
+};
+
+export type ToolData = {
+  id: string;
+  name: string;
+  description: string | null;
+  category: string;
+  status: "available" | "unavailable" | "borrowed" | "pending";
+  created_by: string;
+  createdBy: {
+    id: string;
+    name: string;
+  };
+  updated_by: string;
+  updatedBy: {
+    id: string;
+    name: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type LoansList = {
