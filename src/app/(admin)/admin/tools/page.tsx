@@ -1,7 +1,7 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
 import DialogCreateTools from "@/components/dialog/dialog-create-tools";
 import { DataTable } from "@/components/table/data-table";
-import { toolsColumns } from "@/components/table/tools-columns";
+import { toolsColumns } from "@/components/table/tools/tools-columns";
 
 const toolsData = [
   {

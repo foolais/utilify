@@ -72,6 +72,8 @@ model Tool {
     updatedBy User @relation("ToolsUpdatedBy", fields: [updated_by], references: [id])
 
     loans Loan[]
+
+    @@map("tool")
 }
 
 model Loan {
@@ -89,6 +91,8 @@ model Loan {
 
     createdBy User @relation("LoanCreatedBy", fields: [created_by], references: [id])
     updatedBy User @relation("LoanUpdatedBy", fields: [updated_by], references: [id])
+
+    @@map("loan")
 }
 
 model AuditLog {
@@ -99,6 +103,8 @@ model AuditLog {
     targetid   String
     targetType TargetType
     createdAt  DateTime   @default(now())
+
+    @@map("auditLog")
 }
 
 enum UserRole {

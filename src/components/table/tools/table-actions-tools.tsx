@@ -6,13 +6,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+} from "../../ui/dropdown-menu";
+import { Button } from "../../ui/button";
 import { InfoIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import DialogForm from "../dialog/dialog-form";
-import FormDetailTools from "../form/tools/form-detail-tools";
-import FormUpdateTools from "../form/tools/form-update-tools";
+import DialogForm from "../../dialog/dialog-form";
+import FormDetailTools from "../../form/tools/form-detail-tools";
+import FormUpdateTools from "../../form/tools/form-update-tools";
 
 const TableActionTools = ({ index }: { index: number }) => {
   const [openStatus, setOpenStatus] = useState({
