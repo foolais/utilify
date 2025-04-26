@@ -5,33 +5,41 @@ import { auth } from "../../../auth";
 import { prisma } from "../prisma";
 import { ToolsSchema } from "../zod/zod-tools";
 import { revalidatePath } from "next/cache";
+import { ITEM_PER_PAGE } from "../data";
 
-export const getAllTools = async () => {
+export const getAllTools = async (currentPage: number) => {
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
-  const tools = await prisma.tool.findMany({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      category: true,
-      status: true,
-      created_by: true,
-      createdBy: { select: { id: true, name: true } },
-      updated_by: true,
-      updatedBy: { select: { id: true, name: true } },
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  const pageSize = ITEM_PER_PAGE;
+
+  const [tools, count] = await prisma.$transaction([
+    prisma.tool.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        category: true,
+        status: true,
+        created_by: true,
+        createdBy: { select: { id: true, name: true } },
+        updated_by: true,
+        updatedBy: { select: { id: true, name: true } },
+        createdAt: true,
+        updatedAt: true,
+      },
+      take: pageSize,
+      skip: pageSize * (currentPage - 1),
+    }),
+    prisma.tool.count(),
+  ]);
 
   const data = tools.map((tool, index) => ({
-    no: index + 1,
+    no: (currentPage - 1) * pageSize + (index + 1),
     ...tool,
     description: tool.description || "",
   }));
-  return { data };
+  return { data, count };
 };
 
 export const getToolById = async (id: string) => {
