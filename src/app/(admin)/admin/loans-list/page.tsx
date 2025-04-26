@@ -1,7 +1,7 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
 import DialogCreateLoansList from "@/components/dialog/dialog-create-loans-list";
 import { DataTable } from "@/components/table/data-table";
-import { loansListColumns } from "@/components/table/loan-list/loans-list-colums";
+import { loansListColumns } from "@/components/table/loan-list/loans-list-columms";
 
 const loansListData = [
   {

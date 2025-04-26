@@ -3,14 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import TableActionLoansRequest from "./table-actions-loans-request";
-
-export type LoanRequest = {
-  id: string;
-  email: string;
-  tools: string;
-  loan_date: Date;
-  return_date: Date;
-};
+import { LoanRequest } from "@/types/types";
 
 export const loansRequestColumns: ColumnDef<LoanRequest>[] = [
   {

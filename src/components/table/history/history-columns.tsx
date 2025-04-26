@@ -1,27 +1,14 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { History } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
-import TableActionLoans from "./table-actions-loans";
 
-export type LoansList = {
-  id: string;
-  email: string;
-  tools: string;
-  loan_date: Date;
-  return_date: Date;
-  status: "borrowed" | "returned" | "overdue";
-};
-
-export const loansListColumns: ColumnDef<LoansList>[] = [
+export const historyColumns: ColumnDef<History>[] = [
   {
     accessorKey: "no",
     header: "No",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
   },
   {
     accessorKey: "tools",
@@ -53,13 +40,6 @@ export const loansListColumns: ColumnDef<LoansList>[] = [
           <Badge className="mx-auto">{status}</Badge>
         </div>
       );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return <TableActionLoans index={row.index} />;
     },
   },
 ];

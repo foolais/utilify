@@ -4,14 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { truncateText } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import TableActionTools from "./table-actions-tools";
-
-export type Tools = {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  status: "available" | "borrowed" | "returned" | "overdue";
-};
+import { Tools } from "@/types/types";
 
 export const toolsColumns: ColumnDef<Tools>[] = [
   {

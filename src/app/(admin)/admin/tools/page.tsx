@@ -1,7 +1,7 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
 import DialogCreateTools from "@/components/dialog/dialog-create-tools";
 import { DataTable } from "@/components/table/data-table";
-import { toolsColumns } from "@/components/table/tools-colums";
+import { toolsColumns } from "@/components/table/tools-columns";
 
 const toolsData = [
   {
@@ -34,7 +34,7 @@ const toolsData = [
     name: "Budget Planner",
     description: "Helps teams plan and track expenses effectively.",
     category: "finance",
-    status: "returned" as const,
+    status: "unavailable" as const,
   },
   {
     id: "5",
@@ -50,7 +50,7 @@ const toolsData = [
     name: "Team Scheduler",
     description: "Assists with team calendar management and shift planning.",
     category: "management",
-    status: "overdue" as const,
+    status: "unavailable" as const,
   },
   {
     id: "7",
@@ -74,7 +74,7 @@ const toolsData = [
     name: "Invoice Generator",
     description: "Generates and sends invoices automatically.",
     category: "finance",
-    status: "returned" as const,
+    status: "unavailable" as const,
   },
   {
     id: "10",
@@ -106,7 +106,7 @@ const toolsData = [
     name: "Live Chat Support",
     description: "Real-time chat system for customer engagement.",
     category: "service",
-    status: "overdue" as const,
+    status: "unavailable" as const,
   },
   {
     id: "14",
@@ -114,7 +114,7 @@ const toolsData = [
     name: "Expense Monitor",
     description: "Tracks and categorizes daily business expenses.",
     category: "finance",
-    status: "returned" as const,
+    status: "borrowed" as const,
   },
   {
     id: "15",

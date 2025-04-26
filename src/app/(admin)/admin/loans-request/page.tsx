@@ -1,6 +1,6 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
 import { DataTable } from "@/components/table/data-table";
-import { loansRequestColumns } from "@/components/table/loan-request.tsx/loans-request-colums";
+import { loansRequestColumns } from "@/components/table/loan-request.tsx/loans-request-columns";
 
 const loansRequestData = [
   {
@@ -128,7 +128,7 @@ const loansRequestData = [
 const LoanRequest = () => {
   return (
     <div>
-      <ContainerSearchForm widthClassName="w-[300px] lg:w-[400px]">
+      <ContainerSearchForm widthClassName="w-3/4 sm:w-[300px] lg:w-[400px]">
         <div></div>
       </ContainerSearchForm>
       <DataTable columns={loansRequestColumns} data={loansRequestData} />
