@@ -33,10 +33,10 @@ const AdminToolsPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const { page } = await searchParams;
-  console.log({ page });
+  const { page, search = "", category = "" } = await searchParams;
+  console.log({ page, search, category });
   const p = page ? parseInt(page) : 1;
-  const tools = await getAllTools(p);
+  const tools = await getAllTools(p, search, category);
 
   return (
     <div>

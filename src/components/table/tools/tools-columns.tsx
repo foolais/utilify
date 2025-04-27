@@ -20,7 +20,7 @@ export const toolsColumns: ColumnDef<ToolsColumn>[] = [
     header: "Description",
     cell: ({ getValue }) => {
       const description = getValue<string>();
-      return truncateText(description, 20);
+      return description ? truncateText(description, 20) : "-";
     },
   },
   {

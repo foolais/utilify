@@ -7,7 +7,11 @@ import { ToolsSchema } from "../zod/zod-tools";
 import { revalidatePath } from "next/cache";
 import { ITEM_PER_PAGE } from "../data";
 
-export const getAllTools = async (currentPage: number) => {
+export const getAllTools = async (
+  currentPage: number,
+  search: string,
+  category: string,
+) => {
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
@@ -30,6 +34,10 @@ export const getAllTools = async (currentPage: number) => {
       },
       take: pageSize,
       skip: pageSize * (currentPage - 1),
+      where: {
+        name: { contains: search, mode: "insensitive" },
+        category: { contains: category, mode: "insensitive" },
+      },
     }),
     prisma.tool.count(),
   ]);
