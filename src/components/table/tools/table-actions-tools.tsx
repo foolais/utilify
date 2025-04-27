@@ -25,6 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteTools } from "@/lib/actions/actions-tools";
+import { toast } from "sonner";
 
 const TableActionTools = ({
   index,
@@ -39,6 +40,15 @@ const TableActionTools = ({
     value: false,
     type: "",
   });
+
+  const handleDelete = async () => {
+    try {
+      await deleteTools(id);
+      toast.success("Tools deleted successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -87,7 +97,7 @@ const TableActionTools = ({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => deleteTools(id)}>
+                <AlertDialogAction onClick={handleDelete}>
                   Yes
                 </AlertDialogAction>
               </AlertDialogFooter>

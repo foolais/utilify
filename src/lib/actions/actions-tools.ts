@@ -39,7 +39,12 @@ export const getAllTools = async (
         category: { contains: category, mode: "insensitive" },
       },
     }),
-    prisma.tool.count(),
+    prisma.tool.count({
+      where: {
+        name: { contains: search, mode: "insensitive" },
+        category: { contains: category, mode: "insensitive" },
+      },
+    }),
   ]);
 
   const data = tools.map((tool, index) => ({

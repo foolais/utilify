@@ -115,8 +115,8 @@ enum UserRole {
 enum ToolStatus {
     available
     unavailable
-    borrowed
     pending
+    borrowed
 }
 
 enum LoanStatus {

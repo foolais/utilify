@@ -4,29 +4,8 @@ import { DataTable } from "@/components/table/data-table";
 import TablePagination from "@/components/table/table-pagination";
 import { toolsColumns } from "@/components/table/tools/tools-columns";
 import { getAllTools } from "@/lib/actions/actions-tools";
-
-const categoriesData = [
-  {
-    value: "management",
-    label: "Management",
-  },
-  {
-    value: "analytics",
-    label: "Analytics",
-  },
-  {
-    value: "service",
-    label: "Service",
-  },
-  {
-    value: "finance",
-    label: "Finance",
-  },
-  {
-    value: "hr",
-    label: "HR",
-  },
-];
+import { TOOLS_CATEGORIES } from "@/lib/data";
+import { notFound } from "next/navigation";
 
 const AdminToolsPage = async ({
   searchParams,
@@ -34,13 +13,15 @@ const AdminToolsPage = async ({
   searchParams: { [key: string]: string | undefined };
 }) => {
   const { page, search = "", category = "" } = await searchParams;
-  console.log({ page, search, category });
   const p = page ? parseInt(page) : 1;
+
+  if (p === 0) return notFound();
+
   const tools = await getAllTools(p, search, category);
 
   return (
     <div>
-      <ContainerSearchForm categoriesData={categoriesData}>
+      <ContainerSearchForm categoriesData={TOOLS_CATEGORIES}>
         <DialogCreateTools />
       </ContainerSearchForm>
       <DataTable columns={toolsColumns} data={tools?.data ?? []} />

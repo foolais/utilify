@@ -5,6 +5,7 @@ import { Textarea } from "../../ui/textarea";
 import { createTools } from "@/lib/actions/actions-tools";
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
+import { TOOLS_CATEGORIES, TOOLS_STATUS } from "@/lib/data";
 
 interface iFormCreateTool {
   name: string;
@@ -12,21 +13,6 @@ interface iFormCreateTool {
   category: string;
   status: string;
 }
-
-const categoriesData = [
-  { value: "management", label: "Management" },
-  { value: "analytics", label: "Analytics" },
-  { value: "service", label: "Service" },
-  { value: "finance", label: "Finance" },
-  { value: "hr", label: "HR" },
-];
-
-const statusData = [
-  { value: "available", label: "Available" },
-  { value: "borrowed", label: "Borrowed" },
-  { value: "returned", label: "Returned" },
-  { value: "overdue", label: "Overdue" },
-];
 
 const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   const [formValues, setFormValues] = useState<iFormCreateTool>({
@@ -89,7 +75,7 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
           name="category"
           label="Category"
           placeholder="Select category"
-          data={categoriesData}
+          data={TOOLS_CATEGORIES}
           value={categoryValue}
           setValue={setCategoryValue}
           onChangeForm={(val) =>
@@ -105,7 +91,7 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
           name="status"
           label="Status"
           placeholder="Select status"
-          data={statusData}
+          data={TOOLS_STATUS}
           value={statusValue}
           setValue={setStatusValue}
           onChangeForm={(val) =>

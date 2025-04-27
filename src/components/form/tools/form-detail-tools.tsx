@@ -55,6 +55,7 @@ const FormDetailTools = ({ id }: { id: string }) => {
           />
         </div>
         <FormFieldInput
+          className="capitalize"
           name="category"
           label="Category"
           value={formValues.category}
@@ -62,6 +63,7 @@ const FormDetailTools = ({ id }: { id: string }) => {
           disabled
         />
         <FormFieldInput
+          className="capitalize"
           name="status"
           label="Status"
           value={formValues.status}
