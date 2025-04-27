@@ -13,8 +13,28 @@ import { useState } from "react";
 import DialogForm from "../../dialog/dialog-form";
 import FormDetailTools from "../../form/tools/form-detail-tools";
 import FormUpdateTools from "../../form/tools/form-update-tools";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteTools } from "@/lib/actions/actions-tools";
 
-const TableActionTools = ({ index, id }: { index: number; id: string }) => {
+const TableActionTools = ({
+  index,
+  id,
+  name,
+}: {
+  index: number;
+  id: string;
+  name: string;
+}) => {
   const [openStatus, setOpenStatus] = useState({
     value: false,
     type: "",
@@ -45,10 +65,34 @@ const TableActionTools = ({ index, id }: { index: number; id: string }) => {
             <PencilIcon />
             Update
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-destructive cursor-pointer">
-            <Trash2Icon color="red" />
-            Delete
-          </DropdownMenuItem>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                className="text-destructive cursor-pointer"
+                onSelect={(e) => e.preventDefault()}
+              >
+                <Trash2Icon color="red" />
+                Delete
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-red-500">
+                  {`Are you sure to delete ${name}?`}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently reject the
+                  loan
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => deleteTools(id)}>
+                  Yes
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogForm

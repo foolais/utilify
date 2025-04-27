@@ -51,7 +51,13 @@ export const toolsColumns: ColumnDef<ToolsColumn>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      return <TableActionTools index={row.index} id={row.original.id} />;
+      return (
+        <TableActionTools
+          index={row.index}
+          id={row.original.id}
+          name={row.original.name}
+        />
+      );
     },
   },
 ];

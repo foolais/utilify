@@ -140,8 +140,6 @@ export const updateTools = async (
 
   const { name, description, category, status } = validatedFields.data;
 
-  console.log({ name, description, category, status });
-
   try {
     await prisma.tool.update({
       where: { id },
@@ -158,6 +156,24 @@ export const updateTools = async (
     revalidatePath(`/admin/tools`);
 
     return { success: true, message: "Tools updated successfully" };
+  } catch (error) {
+    console.log({ error });
+    return { error: { error: [error] } };
+  }
+};
+
+export const deleteTools = async (id: string) => {
+  const session = await auth();
+  if (!session) return { error: { auth: ["User not found"] } };
+
+  try {
+    await prisma.tool.delete({
+      where: { id },
+    });
+
+    revalidatePath(`/admin/tools`);
+
+    return { success: true, message: "Tools deleted successfully" };
   } catch (error) {
     console.log({ error });
     return { error: { error: [error] } };
