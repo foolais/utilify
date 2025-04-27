@@ -15,7 +15,7 @@ const UserAvatar = async () => {
           {session?.user?.email}
         </p>
         <p className="text-xs font-semibold text-slate-400 capitalize md:text-sm">
-          Role
+          {session?.user?.role}
         </p>
       </div>
     </div>

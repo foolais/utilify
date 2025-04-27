@@ -17,7 +17,7 @@ const AdminToolsPage = async ({
 
   if (p === 0) return notFound();
 
-  const tools = await getAllTools(p, search, category);
+  const tools = await getAllTools(p, search, category, "all");
 
   return (
     <div>

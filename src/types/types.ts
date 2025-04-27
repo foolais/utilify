@@ -1,9 +1,11 @@
+import { ToolStatus } from "@prisma/client";
+
 export type ToolsColumn = {
   id: string;
   name: string;
   description: string;
   category: string;
-  status: "available" | "unavailable" | "borrowed" | "pending";
+  status: ToolStatus;
 };
 
 export type ToolData = {
@@ -11,7 +13,7 @@ export type ToolData = {
   name: string;
   description: string | null;
   category: string;
-  status: "available" | "unavailable" | "borrowed" | "pending";
+  status: ToolStatus;
   created_by: string;
   createdBy: {
     id: string;

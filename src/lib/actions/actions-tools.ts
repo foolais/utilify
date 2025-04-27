@@ -11,11 +11,14 @@ export const getAllTools = async (
   currentPage: number,
   search: string,
   category: string,
+  status: "available" | "unavailable" | "pending" | "borrowed" | "all",
 ) => {
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
   const pageSize = ITEM_PER_PAGE;
+
+  const isStatusValid = typeof status === "string" ? status !== "all" : true;
 
   const [tools, count] = await prisma.$transaction([
     prisma.tool.findMany({
@@ -37,12 +40,14 @@ export const getAllTools = async (
       where: {
         name: { contains: search, mode: "insensitive" },
         category: { contains: category, mode: "insensitive" },
+        ...(isStatusValid && status !== "all" ? { status } : {}),
       },
     }),
     prisma.tool.count({
       where: {
         name: { contains: search, mode: "insensitive" },
         category: { contains: category, mode: "insensitive" },
+        ...(isStatusValid && status !== "all" ? { status } : {}),
       },
     }),
   ]);

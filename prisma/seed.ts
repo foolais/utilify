@@ -11,6 +11,7 @@ async function main() {
   }
 
   const statuses = ["available", "unavailable", "pending", "borrowed"] as const;
+  // const statuses = ["available"] as const;
   const categories = ["hardware", "software", "accessory"] as const;
 
   const tools = Array.from({ length: 15 }).map((_, index) => ({
