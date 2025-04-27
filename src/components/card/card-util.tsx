@@ -1,4 +1,3 @@
-import { Button } from "../ui/button";
 import {
   Card,
   CardDescription,
@@ -8,14 +7,16 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Flag } from "lucide-react";
+import CardUtilBtn from "./card-util-btn";
 
 interface iPropsCardUtil {
+  id: string;
   name: string;
   description: string;
   category: string;
 }
 
-const CardUtil = ({ name, description, category }: iPropsCardUtil) => {
+const CardUtil = ({ id, name, description, category }: iPropsCardUtil) => {
   return (
     <Card>
       <CardHeader>
@@ -27,7 +28,7 @@ const CardUtil = ({ name, description, category }: iPropsCardUtil) => {
         </Badge>
       </CardHeader>
       <CardFooter className="mt-auto flex justify-end">
-        <Button>Make a Loan</Button>
+        <CardUtilBtn id={id} name={name} description={description} />
       </CardFooter>
     </Card>
   );

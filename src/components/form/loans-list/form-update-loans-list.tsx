@@ -108,7 +108,7 @@ const FormUpdateLoansList = ({
               >
                 <CalendarIcon />
                 {loanDate ? (
-                  moment(loanDate).format("L")
+                  moment(loanDate).format("LL")
                 ) : (
                   <span>Pick a loan date</span>
                 )}
@@ -151,7 +151,7 @@ const FormUpdateLoansList = ({
               >
                 <CalendarIcon />
                 {returnDate ? (
-                  moment(returnDate).format("L")
+                  moment(returnDate).format("LL")
                 ) : (
                   <span>Pick a return date</span>
                 )}

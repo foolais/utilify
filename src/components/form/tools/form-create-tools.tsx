@@ -29,9 +29,8 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
   const hasRun = useRef(false);
 
   useEffect(() => {
-    console.log({ state });
     if (!hasRun.current && state?.success && state?.message) {
-      toast(state.message);
+      toast.success(state.message, { duration: 1500 });
       onCloseDialog();
       hasRun.current = true;
     }

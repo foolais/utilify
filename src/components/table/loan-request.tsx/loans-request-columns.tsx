@@ -23,7 +23,7 @@ export const loansRequestColumns: ColumnDef<LoanRequest>[] = [
     header: "Loan Date",
     cell: ({ getValue }) => {
       const loanDate = getValue<Date>();
-      return moment(loanDate).format("L");
+      return moment(loanDate).format("LL");
     },
   },
   {
@@ -31,7 +31,7 @@ export const loansRequestColumns: ColumnDef<LoanRequest>[] = [
     header: "Return Date",
     cell: ({ getValue }) => {
       const returnDate = getValue<Date>();
-      return moment(returnDate).format("L");
+      return moment(returnDate).format("LL");
     },
   },
   {

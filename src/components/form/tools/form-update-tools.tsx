@@ -52,7 +52,7 @@ const FormUpdateTools = ({
 
   useEffect(() => {
     if (!hasRun.current && state?.success && state?.message) {
-      toast(state.message);
+      toast.success(state.message, { duration: 1500 });
       onCloseDialog();
       hasRun.current = true;
     }

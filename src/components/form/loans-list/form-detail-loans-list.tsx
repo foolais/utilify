@@ -49,14 +49,14 @@ const FormDetailLoansList = () => {
         <FormFieldInput
           name="loan_date"
           label="Loan Date"
-          value={moment(formValues.loan_date).format("L")}
+          value={moment(formValues.loan_date).format("LL")}
           placeholder="Enter loan date..."
           disabled
         />
         <FormFieldInput
           name="return_date"
           label="Return Date"
-          value={moment(formValues.return_date).format("L")}
+          value={moment(formValues.return_date).format("LL")}
           placeholder="Enter return date..."
           disabled
         />

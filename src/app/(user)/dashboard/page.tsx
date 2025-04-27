@@ -27,14 +27,7 @@ const DashboardPage = async ({
       </div>
       <div className="grid max-h-[75dvh] grid-cols-2 gap-4 overflow-y-auto md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {tools?.data && tools?.data.length > 0 ? (
-          tools?.data?.map((item, index) => (
-            <CardUtil
-              key={index}
-              name={item.name}
-              description={item.description}
-              category={item.category}
-            />
-          ))
+          tools?.data?.map((item, index) => <CardUtil key={index} {...item} />)
         ) : (
           <div className="flex-center col-span-3 mx-auto">
             <p className="text-xl font-semibold capitalize">No tools found</p>
