@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,26 +12,55 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { updateLoanRequest } from "@/lib/actions/actions-loans-request";
 import { formatDate } from "@/lib/utils";
-import { Check, X } from "lucide-react";
-import React from "react";
-
-interface iProps {
-  email: string;
-  tools: string;
-  loan_date: Date;
-  return_date: Date;
-}
+import { LoanRequest } from "@/types/types";
+import { Check, X, Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 const TableActionLoansRequest = ({
+  id,
   email,
   tools,
+  toolId,
   loan_date,
   return_date,
-}: iProps) => {
+}: LoanRequest) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentAction, setCurrentAction] = useState<
+    "accept" | "reject" | null
+  >(null);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+
+  const handleAction = async (type: "accept" | "reject") => {
+    setIsLoading(true);
+    setCurrentAction(type);
+    try {
+      const res = await updateLoanRequest(type, id, toolId);
+      console.log({ res });
+      if (res.success) toast.success(res.message, { duration: 1500 });
+
+      if (type === "accept") {
+        setIsAcceptOpen(false);
+      } else {
+        setIsRejectOpen(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      toast.error("An error occurred while processing your request");
+    } finally {
+      setIsLoading(false);
+      setCurrentAction(null);
+    }
+  };
+
   return (
     <div className="flex-center mx-auto gap-2">
-      <AlertDialog>
+      {/* Reject Dialog */}
+      <AlertDialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
         <AlertDialogTrigger asChild>
           <Button
             size="icon"
@@ -42,7 +73,14 @@ const TableActionLoansRequest = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-red-500">
-              Confirm Loan Request Rejection
+              {isLoading && currentAction === "reject" ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing Rejection...
+                </div>
+              ) : (
+                "Confirm Loan Request Rejection"
+              )}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {email} submitted a loan request for {tools} on{" "}
@@ -51,13 +89,26 @@ const TableActionLoansRequest = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Yes</AlertDialogAction>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleAction("reject");
+              }}
+              disabled={isLoading}
+            >
+              {isLoading && currentAction === "reject" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Yes"
+              )}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog>
+      {/* Accept Dialog */}
+      <AlertDialog open={isAcceptOpen} onOpenChange={setIsAcceptOpen}>
         <AlertDialogTrigger asChild>
           <Button
             size="icon"
@@ -70,7 +121,14 @@ const TableActionLoansRequest = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-green-500">
-              Confirm Loan Request Approval
+              {isLoading && currentAction === "accept" ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Processing Approval...
+                </div>
+              ) : (
+                "Confirm Loan Request Approval"
+              )}
             </AlertDialogTitle>
             <AlertDialogDescription>
               <span>
@@ -81,8 +139,20 @@ const TableActionLoansRequest = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Yes</AlertDialogAction>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleAction("accept");
+              }}
+              disabled={isLoading}
+            >
+              {isLoading && currentAction === "accept" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Yes"
+              )}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -40,6 +40,7 @@ export type LoansList = {
 export type LoanRequest = {
   id: string;
   email: string;
+  toolId: string;
   tools: string;
   loan_date: Date;
   return_date: Date;
