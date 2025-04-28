@@ -14,3 +14,11 @@ export const TOOLS_STATUS = [
   { value: "pending", label: "Pending" },
   { value: "borrowed", label: "Borrowed" },
 ];
+
+export const LOANS_STATUS = [
+  { value: "pending", label: "Pending" },
+  { value: "rejected", label: "Rejected" },
+  { value: "borrowed", label: "Borrowed" },
+  { value: "returned", label: "Returned" },
+  { value: "overdue", label: "Overdue" },
+];

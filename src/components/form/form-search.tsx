@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -13,6 +13,7 @@ import {
   CommandList,
 } from "../ui/command";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 
 interface CategoryOption {
   value: string;
@@ -36,9 +37,21 @@ const FormSearch = ({
   onSearch,
   widthInput,
 }: iFormSearch) => {
+  const searchParams = useSearchParams();
+
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
+
+  useEffect(() => {
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const status = searchParams.get("status") || "";
+
+    setSearchValue(search);
+    if (name === "category") setCategoryValue(category);
+    else if (name === "status") setCategoryValue(status);
+  }, [searchParams, name]);
 
   return (
     <div

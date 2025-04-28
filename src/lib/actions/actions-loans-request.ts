@@ -4,6 +4,59 @@ import { revalidatePath } from "next/cache";
 import { auth } from "../../../auth";
 import { LoansRequestSchema } from "../zod/zod-loans-request";
 import { prisma } from "../prisma";
+import { ITEM_PER_PAGE } from "../data";
+import { LoanStatus } from "@prisma/client";
+
+export const getAllLoansRequestById = async (
+  currentPage: number,
+  search: string,
+  status: LoanStatus,
+) => {
+  const session = await auth();
+  if (!session) return { error: { auth: ["You must be logged in"] } };
+
+  const pageSize = ITEM_PER_PAGE;
+
+  const [loans, count] = await prisma.$transaction([
+    prisma.loan.findMany({
+      where: {
+        email: session?.user?.email ?? "",
+        tool: {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        status: status,
+      },
+      select: {
+        id: true,
+        toolId: true,
+        tool: { select: { name: true, category: true } },
+        return_date: true,
+        loan_date: true,
+        status: true,
+        created_by: true,
+        createdBy: { select: { id: true, name: true } },
+        updated_by: true,
+        updatedBy: { select: { id: true, name: true } },
+        createdAt: true,
+        updatedAt: true,
+      },
+      take: pageSize,
+      skip: pageSize * (currentPage - 1),
+    }),
+    prisma.loan.count(),
+  ]);
+
+  const data = loans.map((loan, index) => ({
+    no: (currentPage - 1) * pageSize + (index + 1),
+    tools: loan.tool.name,
+    ...loan,
+  }));
+
+  return { data, count };
+};
 
 export const createLoanRequest = async (
   id: string,

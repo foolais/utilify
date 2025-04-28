@@ -25,7 +25,7 @@ const DashboardPage = async ({
           widthClassName="w-3/4 sm:w-[250px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
         />
       </div>
-      <div className="grid max-h-[75dvh] grid-cols-2 gap-4 overflow-y-auto md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid max-h-[70dvh] grid-cols-2 gap-4 overflow-y-auto md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {tools?.data && tools?.data.length > 0 ? (
           tools?.data?.map((item, index) => <CardUtil key={index} {...item} />)
         ) : (

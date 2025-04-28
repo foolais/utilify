@@ -50,5 +50,5 @@ export type History = {
   tools: string;
   return_date: Date;
   loan_date: Date;
-  status: "pending" | "borrowed" | "returned" | "overdue";
+  status: "pending" | "rejected" | "borrowed" | "returned" | "overdue";
 };
