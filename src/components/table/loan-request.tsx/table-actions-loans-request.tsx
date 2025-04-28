@@ -10,10 +10,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils";
 import { Check, X } from "lucide-react";
 import React from "react";
 
-const TableActionLoansRequest = () => {
+interface iProps {
+  email: string;
+  tools: string;
+  loan_date: Date;
+  return_date: Date;
+}
+
+const TableActionLoansRequest = ({
+  email,
+  tools,
+  loan_date,
+  return_date,
+}: iProps) => {
   return (
     <div className="flex-center mx-auto gap-2">
       <AlertDialog>
@@ -29,11 +42,12 @@ const TableActionLoansRequest = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-red-500">
-              Are you sure to reject?
+              Confirm Loan Request Rejection
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently reject the
-              loan
+              {email} submitted a loan request for {tools} on{" "}
+              {formatDate(loan_date)}, with a scheduled return on{" "}
+              {formatDate(return_date)}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -56,11 +70,14 @@ const TableActionLoansRequest = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-green-500">
-              Are you sure to accept?
+              Confirm Loan Request Approval
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently accept the
-              loan
+              <span>
+                {email} submitted a loan request for {tools} on{" "}
+                {formatDate(loan_date)}, with a scheduled return on{" "}
+                {formatDate(return_date)}.
+              </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

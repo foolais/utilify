@@ -37,8 +37,16 @@ export const loansRequestColumns: ColumnDef<LoanRequest>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
-      return <TableActionLoansRequest />;
+    cell: ({ row }) => {
+      const { email, tools, loan_date, return_date } = row.original;
+      return (
+        <TableActionLoansRequest
+          email={email}
+          tools={tools}
+          loan_date={loan_date}
+          return_date={return_date}
+        />
+      );
     },
   },
 ];

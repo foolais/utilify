@@ -2,7 +2,7 @@ import ContainerSearchForm from "@/components/container/container-search-form";
 import { DataTable } from "@/components/table/data-table";
 import { historyColumns } from "@/components/table/history/history-columns";
 import TablePagination from "@/components/table/table-pagination";
-import { getAllLoansRequestById } from "@/lib/actions/actions-loans-request";
+import { getAllLoansRequest } from "@/lib/actions/actions-loans-request";
 import { LOANS_STATUS } from "@/lib/data";
 import { LoanStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
@@ -19,14 +19,13 @@ const HistoryPage = async ({
 
   // validate status params
   const validStatuses = Object.values(LoanStatus) as string[];
-  const statusParam = status ?? LoanStatus.pending;
 
-  if (!validStatuses.includes(statusParam)) return notFound();
+  if (status && !validStatuses.includes(status)) return notFound();
 
-  const historyData = await getAllLoansRequestById(
+  const { count, data } = await getAllLoansRequest(
     p,
     search,
-    statusParam as LoanStatus,
+    status as LoanStatus | undefined,
   );
 
   return (
@@ -39,8 +38,8 @@ const HistoryPage = async ({
         />
       </div>
       <div className="sm:px-4 md:px-6">
-        <DataTable columns={historyColumns} data={historyData?.data ?? []} />
-        <TablePagination currentPage={p} count={historyData?.count ?? 0} />
+        <DataTable columns={historyColumns} data={data ?? []} />
+        <TablePagination currentPage={p} count={count ?? 0} />
       </div>
     </>
   );
