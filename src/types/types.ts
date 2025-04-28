@@ -1,4 +1,4 @@
-import { ToolStatus } from "@prisma/client";
+import { LoanStatus, ToolStatus } from "@prisma/client";
 
 export type ToolsColumn = {
   id: string;
@@ -34,7 +34,7 @@ export type LoansList = {
   tools: string;
   loan_date: Date;
   return_date: Date;
-  status: "borrowed" | "returned" | "overdue";
+  status: LoanStatus;
 };
 
 export type LoanRequest = {

@@ -11,6 +11,7 @@ export const getAllLoansRequest = async (
   currentPage: number,
   search: string,
   status?: LoanStatus | undefined,
+  isExcludePending?: boolean,
 ) => {
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
@@ -23,7 +24,11 @@ export const getAllLoansRequest = async (
   const allLoans = await prisma.loan.findMany({
     where: {
       ...(isAdmin ? {} : { created_by: email, email }),
-      ...(status ? { status } : {}),
+      ...(status
+        ? { status }
+        : isExcludePending
+          ? { status: { not: "pending" } }
+          : {}),
       tool: {
         name: {
           contains: search,
@@ -53,21 +58,26 @@ export const getAllLoansRequest = async (
   });
 
   if (loansToReject.length > 0) {
-    const rejectPromises = loansToReject.map((loan) =>
-      prisma.loan.update({
-        where: { id: loan.id },
-        data: { status: "rejected" },
-      }),
-    );
-    await Promise.all(rejectPromises);
-
-    const setToolsAvailable = loansToReject.map((loan) =>
-      prisma.tool.update({
-        where: { id: loan.tool.id },
-        data: { status: "available" },
-      }),
-    );
-    await Promise.all(setToolsAvailable);
+    try {
+      const rejectPromises = loansToReject.map((loan) =>
+        prisma.loan.update({
+          where: { id: loan.id },
+          data: { status: "rejected" },
+        }),
+      );
+      const resultsReject = await Promise.all(rejectPromises);
+      console.log(`Updated ${resultsReject.length} loans to reject status`);
+      const setToolsAvailable = loansToReject.map((loan) =>
+        prisma.tool.update({
+          where: { id: loan.tool.id },
+          data: { status: "available" },
+        }),
+      );
+      const resultsAvail = await Promise.all(setToolsAvailable);
+      console.log(`Updated ${resultsAvail.length} tools to available status`);
+    } catch (error) {
+      console.error("Error updating reject loans:", error);
+    }
   }
 
   // update loans to overdue if return_date < now and status is borrowed
@@ -80,13 +90,19 @@ export const getAllLoansRequest = async (
   });
 
   if (loansToOverdue.length > 0) {
-    const rejectPromises = loansToReject.map((loan) =>
-      prisma.loan.update({
-        where: { id: loan.id },
-        data: { status: "rejected" },
-      }),
-    );
-    await Promise.all(rejectPromises);
+    try {
+      const overduePromises = loansToOverdue.map((loan) =>
+        prisma.loan.update({
+          where: { id: loan.id },
+          data: { status: "overdue" },
+        }),
+      );
+
+      const results = await Promise.all(overduePromises);
+      console.log(`Updated ${results.length} loans to overdue status`);
+    } catch (error) {
+      console.error("Error updating overdue loans:", error);
+    }
   }
 
   // uptodate loans
