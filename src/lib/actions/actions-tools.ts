@@ -13,6 +13,7 @@ export const getAllTools = async (
   category: string,
   status: "available" | "unavailable" | "pending" | "borrowed" | "all",
 ) => {
+  console.log({ search });
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
