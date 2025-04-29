@@ -14,7 +14,7 @@ import DialogForm from "../../dialog/dialog-form";
 import FormDetailLoansList from "../../form/loans-list/form-detail-loans-list";
 import FormUpdateLoansList from "../../form/loans-list/form-update-loans-list";
 
-const TableActionLoans = ({ index }: { index: number }) => {
+const TableActionLoans = ({ index, id }: { index: number; id: string }) => {
   const [openStatus, setOpenStatus] = useState({
     value: false,
     type: "",
@@ -56,13 +56,16 @@ const TableActionLoans = ({ index }: { index: number }) => {
         onClose={() => setOpenStatus({ value: false, type: "" })}
         title={openStatus.type === "detail" ? "Detail Loans" : "Update Loans"}
         description={
-          openStatus.type === "detail" ? "Detail Loans" : "Update Loans"
+          openStatus.type === "detail"
+            ? `Detail Loans No ${index + 1}`
+            : `Update Loans No ${index + 1}`
         }
       >
         {openStatus.type === "detail" ? (
           <FormDetailLoansList />
         ) : openStatus.type === "update" ? (
           <FormUpdateLoansList
+            id={id}
             onCloseDialog={() => setOpenStatus({ value: false, type: "" })}
           />
         ) : null}

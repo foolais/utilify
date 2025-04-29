@@ -51,7 +51,7 @@ export const loansListColumns: ColumnDef<LoansList>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      return <TableActionLoans index={row.index} />;
+      return <TableActionLoans index={row.index} id={row.original.id} />;
     },
   },
 ];

@@ -14,7 +14,6 @@ export const getAllTools = async (
   status: "available" | "unavailable" | "pending" | "borrowed" | "all",
   take?: number,
 ) => {
-  console.log({ search });
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
@@ -24,6 +23,7 @@ export const getAllTools = async (
 
   const [tools, count] = await prisma.$transaction([
     prisma.tool.findMany({
+      orderBy: { createdAt: "desc" },
       select: {
         id: true,
         name: true,

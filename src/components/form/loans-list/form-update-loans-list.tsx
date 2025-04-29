@@ -1,7 +1,12 @@
-import { useActionState, useEffect, useRef, useState } from "react";
+"use client";
+
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { FormFieldCombobox, FormFieldInput } from "../form-field";
-import { updateLoansList } from "@/lib/actions/actions-loans-list";
+import {
+  getLoansById,
+  updateLoansList,
+} from "@/lib/actions/actions-loans-list";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -13,53 +18,125 @@ import moment from "moment";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { LOANS_STATUS } from "@/lib/data";
+import { debounce } from "lodash";
+import { getAllTools } from "@/lib/actions/actions-tools";
 
 interface iFormLoans {
   email: string;
   tools: string;
-  loan_date: string;
-  return_date: string;
+  loan_date: Date;
+  return_date: Date;
   status: string;
 }
 
-const statusData = [
-  { value: "available", label: "Available" },
-  { value: "borrowed", label: "Borrowed" },
-  { value: "returned", label: "Returned" },
-  { value: "overdue", label: "Overdue" },
-];
-
-const toolsData = [
-  { value: "Processor", label: "Processor" },
-  { value: "Monitor", label: "Monitor" },
-  { value: "Keyboard", label: "Keyboard" },
-  { value: "Mouse", label: "Mouse" },
-  { value: "Printer", label: "Printer" },
-];
+interface iToolData {
+  value: string;
+  label: string;
+}
 
 const FormUpdateLoansList = ({
   onCloseDialog,
+  id,
 }: {
   onCloseDialog: () => void;
+  id: string;
 }) => {
   const [formValues, setFormValues] = useState<iFormLoans>({
     email: "",
     tools: "",
-    loan_date: "",
-    return_date: "",
+    loan_date: new Date(),
+    return_date: new Date(),
     status: "",
   });
 
   const [toolsValue, setToolsValue] = useState("");
-  const [statusValue, setStatusValue] = useState("");
-  const [loanDate, setLoanDate] = useState<Date>();
-  const [returnDate, setReturnDate] = useState<Date>();
+  const [toolsData, setToolsData] = useState<iToolData[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const [state, formAction, isPending] = useActionState(updateLoansList, null);
   const hasRun = useRef(false);
 
+  // Memoized debounced fetch function
+  const debouncedFetchTools = useMemo(
+    () =>
+      debounce(async (query: string, label?: string, value?: string) => {
+        try {
+          setIsSearching(true);
+          const { data } = await getAllTools(
+            1,
+            encodeURIComponent(query),
+            query,
+            "available",
+            5,
+          );
+
+          const mappedData = Array.isArray(data)
+            ? data.map((tool) => ({
+                value: tool.id,
+                label: tool.name,
+              }))
+            : [];
+
+          if (label && value) mappedData.push({ label, value });
+
+          setToolsData(mappedData);
+        } catch (error) {
+          console.error("Search error:", error);
+          toast.error(
+            `Failed to search tools: ${error instanceof Error ? error.message : String(error)}`,
+          );
+          setToolsData([]);
+        } finally {
+          setIsSearching(false);
+        }
+      }, 300),
+    [],
+  );
+
+  // Handle search query changes
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      debouncedFetchTools(query);
+    }
+  };
+
+  // Clean up debounce on unmount
   useEffect(() => {
-    console.log({ state });
+    return () => {
+      debouncedFetchTools.cancel();
+    };
+  }, [debouncedFetchTools]);
+
+  // Initial fetching dropdown tools data on combobox
+  useEffect(() => {
+    const initializeData = async () => {
+      try {
+        const loanData = await getLoansById(id);
+
+        if ("error" in loanData) return;
+
+        setFormValues({
+          email: loanData.email ?? "",
+          tools: loanData.toolId ?? "",
+          loan_date: loanData.loan_date,
+          return_date: loanData.return_date,
+          status: loanData.status,
+        });
+
+        setToolsValue(loanData.tool.id);
+
+        await debouncedFetchTools("", loanData.tool.name, loanData.tool.id);
+      } catch (error) {
+        console.error("Initialization error:", error);
+      }
+    };
+
+    initializeData();
+  }, [debouncedFetchTools, id]);
+
+  // Handle after form submission
+  useEffect(() => {
     if (!hasRun.current && state?.success && state?.message) {
       toast(state.message);
       onCloseDialog();
@@ -84,9 +161,12 @@ const FormUpdateLoansList = ({
           name="tools"
           label="Tools"
           placeholder="Select tools"
+          isLoadingQuery={isSearching}
           data={toolsData}
           value={toolsValue}
           setValue={setToolsValue}
+          isQuerySearch
+          onSearch={handleSearch}
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, tools: val }))
           }
@@ -96,19 +176,23 @@ const FormUpdateLoansList = ({
         />
         <div className="flex w-full flex-col space-y-1.5">
           <Label>Loan Date</Label>
-          <input type="hidden" name="loan_date" value={loanDate?.toString()} />
+          <input
+            type="hidden"
+            name="loan_date"
+            value={formValues.loan_date?.toString()}
+          />
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !loanDate && "text-muted-foreground",
+                  !formValues.loan_date && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon />
-                {loanDate ? (
-                  moment(loanDate).format("LL")
+                {formValues.loan_date ? (
+                  moment(formValues.loan_date).format("LL")
                 ) : (
                   <span>Pick a loan date</span>
                 )}
@@ -117,8 +201,15 @@ const FormUpdateLoansList = ({
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={loanDate}
-                onSelect={setLoanDate}
+                selected={formValues.loan_date}
+                onSelect={(date) => {
+                  if (date) {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      loan_date: date,
+                    }));
+                  }
+                }}
                 initialFocus
               />
             </PopoverContent>
@@ -138,7 +229,7 @@ const FormUpdateLoansList = ({
           <input
             type="hidden"
             name="return_date"
-            value={returnDate?.toString()}
+            value={formValues.return_date?.toString()}
           />
           <Popover>
             <PopoverTrigger asChild>
@@ -146,12 +237,12 @@ const FormUpdateLoansList = ({
                 variant={"outline"}
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !returnDate && "text-muted-foreground",
+                  !formValues.return_date && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon />
-                {returnDate ? (
-                  moment(returnDate).format("LL")
+                {formValues.return_date ? (
+                  moment(formValues.return_date).format("LL")
                 ) : (
                   <span>Pick a return date</span>
                 )}
@@ -160,8 +251,15 @@ const FormUpdateLoansList = ({
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={returnDate}
-                onSelect={setReturnDate}
+                selected={formValues.return_date}
+                onSelect={(date) => {
+                  if (date) {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      return_date: date,
+                    }));
+                  }
+                }}
                 initialFocus
               />
             </PopoverContent>
@@ -180,9 +278,9 @@ const FormUpdateLoansList = ({
           name="status"
           label="Status"
           placeholder="Select status"
-          data={statusData}
-          value={statusValue}
-          setValue={setStatusValue}
+          data={LOANS_STATUS}
+          value={formValues.status}
+          setValue={() => setFormValues((prev) => ({ ...prev, status: "" }))}
           onChangeForm={(val) =>
             setFormValues((prev) => ({ ...prev, status: val }))
           }

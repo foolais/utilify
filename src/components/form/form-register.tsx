@@ -12,6 +12,7 @@ import Title from "@/components/ui/title";
 import { registerCredentials } from "@/lib/actions/actions-auth";
 import { useActionState, useEffect, useState } from "react";
 import { FormFieldInput } from "./form-field";
+import { toast } from "sonner";
 
 interface iFormRegister {
   name: string;
@@ -34,9 +35,9 @@ const FormRegister = ({ onToggleForm }: { onToggleForm: () => void }) => {
   );
 
   useEffect(() => {
-    if (state && state.error) console.log(state.message);
+    if (state && state.error) toast.error(state.message, { duration: 1500 });
     else if (state?.success) {
-      console.log(state.message);
+      toast.success(state.message, { duration: 1500 });
       onToggleForm();
     }
   }, [state, onToggleForm]);

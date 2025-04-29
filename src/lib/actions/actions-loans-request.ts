@@ -22,6 +22,7 @@ export const getAllLoansRequest = async (
 
   // find all loans
   const allLoans = await prisma.loan.findMany({
+    orderBy: { createdAt: "desc" },
     where: {
       ...(isAdmin ? {} : { created_by: email, email }),
       ...(status
@@ -108,6 +109,7 @@ export const getAllLoansRequest = async (
   // uptodate loans
   const [loans, count] = await prisma.$transaction([
     prisma.loan.findMany({
+      orderBy: { createdAt: "desc" },
       where: {
         ...(isAdmin ? {} : { created_by: email, email }),
         tool: {

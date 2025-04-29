@@ -47,9 +47,7 @@ const FormCreateLoansList = ({
 
   const [toolsValue, setToolsValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
-  const [toolsData, setToolsData] = useState<iToolData[]>([
-    { value: "sadhjkahdahskd", label: "Processor" },
-  ]);
+  const [toolsData, setToolsData] = useState<iToolData[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
   const [state, formAction, isPending] = useActionState(createLoansList, null);
@@ -106,11 +104,12 @@ const FormCreateLoansList = ({
 
   // Initial data load
   useEffect(() => {
-    debouncedFetchTools(""); // Load initial tools
+    debouncedFetchTools("");
   }, [debouncedFetchTools]);
+
   useEffect(() => {
     if (!hasRun.current && state?.success && state?.message) {
-      toast(state.message);
+      toast.success(state.message, { duration: 1500 });
       onCloseDialog();
       hasRun.current = true;
     }
