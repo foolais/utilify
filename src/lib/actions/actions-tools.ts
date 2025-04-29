@@ -12,12 +12,13 @@ export const getAllTools = async (
   search: string,
   category: string,
   status: "available" | "unavailable" | "pending" | "borrowed" | "all",
+  take?: number,
 ) => {
   console.log({ search });
   const session = await auth();
   if (!session) return { error: { auth: ["You must be logged in"] } };
 
-  const pageSize = ITEM_PER_PAGE;
+  const pageSize = take || ITEM_PER_PAGE;
 
   const isStatusValid = typeof status === "string" ? status !== "all" : true;
 

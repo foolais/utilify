@@ -136,7 +136,7 @@ export const FormFieldCombobox = ({
             )}
             <CommandList>
               {isLoadingQuery ? (
-                <CommandLoading className="flex-center">
+                <CommandLoading className="flex-center py-6 text-center text-sm">
                   Loading...
                 </CommandLoading>
               ) : (

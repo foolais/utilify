@@ -66,6 +66,7 @@ const FormCreateLoansList = ({
             encodeURIComponent(query),
             "",
             "available",
+            5,
           );
 
           const mappedData = Array.isArray(data)

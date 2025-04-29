@@ -15,7 +15,7 @@ const DashboardPage = async ({
 
   if (p === 0) return notFound();
 
-  const tools = await getAllTools(p, search, category, "available");
+  const tools = await getAllTools(p, search, category, "available", 15);
 
   return (
     <div className="px-6">
