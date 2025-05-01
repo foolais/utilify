@@ -5,7 +5,7 @@ import { auth } from "../../../auth";
 import { LoansRequestSchema } from "../zod/zod-loans-request";
 import { prisma } from "../prisma";
 import { ITEM_PER_PAGE } from "../data";
-import { LoanStatus } from "@prisma/client";
+import { LoanStatus, TargetType } from "@prisma/client";
 
 export const getAllLoansRequest = async (
   currentPage: number,
@@ -61,18 +61,38 @@ export const getAllLoansRequest = async (
   if (loansToReject.length > 0) {
     try {
       const rejectPromises = loansToReject.map((loan) =>
-        prisma.loan.update({
-          where: { id: loan.id },
-          data: { status: "rejected" },
-        }),
+        prisma.$transaction([
+          prisma.loan.update({
+            where: { id: loan.id },
+            data: { status: "rejected" },
+          }),
+          prisma.auditLog.create({
+            data: {
+              userId: session?.user?.id ?? "",
+              action: `Changed loan ${loan.tool} status to reject`,
+              targetid: loan.id,
+              targetType: TargetType.LOAN,
+            },
+          }),
+        ]),
       );
       const resultsReject = await Promise.all(rejectPromises);
       console.log(`Updated ${resultsReject.length} loans to reject status`);
       const setToolsAvailable = loansToReject.map((loan) =>
-        prisma.tool.update({
-          where: { id: loan.tool.id },
-          data: { status: "available" },
-        }),
+        prisma.$transaction([
+          prisma.tool.update({
+            where: { id: loan.tool.id },
+            data: { status: "available" },
+          }),
+          prisma.auditLog.create({
+            data: {
+              userId: session?.user?.id ?? "",
+              action: `Changed loan ${loan.tool} status to available`,
+              targetid: loan.id,
+              targetType: TargetType.LOAN,
+            },
+          }),
+        ]),
       );
       const resultsAvail = await Promise.all(setToolsAvailable);
       console.log(`Updated ${resultsAvail.length} tools to available status`);
@@ -93,10 +113,20 @@ export const getAllLoansRequest = async (
   if (loansToOverdue.length > 0) {
     try {
       const overduePromises = loansToOverdue.map((loan) =>
-        prisma.loan.update({
-          where: { id: loan.id },
-          data: { status: "overdue" },
-        }),
+        prisma.$transaction([
+          prisma.loan.update({
+            where: { id: loan.id },
+            data: { status: "overdue" },
+          }),
+          prisma.auditLog.create({
+            data: {
+              userId: session?.user?.id ?? "",
+              action: `Changed loan ${loan.tool} status to overdue`,
+              targetid: loan.id,
+              targetType: TargetType.LOAN,
+            },
+          }),
+        ]),
       );
 
       const results = await Promise.all(overduePromises);
@@ -193,7 +223,7 @@ export const createLoanRequest = async (
   };
 
   try {
-    await prisma.$transaction([
+    const [loans, tools] = await prisma.$transaction([
       prisma.loan.create({
         data: payload,
       }),
@@ -204,6 +234,23 @@ export const createLoanRequest = async (
         },
       }),
     ]);
+
+    await prisma.auditLog.createMany({
+      data: [
+        {
+          userId: session?.user?.id ?? "",
+          action: `Created loan request for ${tools.name}`,
+          targetid: loans.id,
+          targetType: TargetType.LOAN,
+        },
+        {
+          userId: session?.user?.id ?? "",
+          action: `Updated tool ${tools.name} status to pending`,
+          targetid: tools.id,
+          targetType: TargetType.TOOL,
+        },
+      ],
+    });
 
     revalidatePath(`/dashboard`);
     return { success: true, message: "Loan request created successfully" };
@@ -222,7 +269,7 @@ export const updateLoanRequest = async (
   if (!session) return { error: { auth: ["User not found"] } };
 
   try {
-    await prisma.$transaction([
+    const [tools, loans] = await prisma.$transaction([
       prisma.tool.update({
         data: {
           status: type === "accept" ? "borrowed" : "available",
@@ -238,6 +285,29 @@ export const updateLoanRequest = async (
         where: { id: loanId },
       }),
     ]);
+
+    await prisma.auditLog.createMany({
+      data: [
+        {
+          userId: session?.user?.id ?? "",
+          action:
+            type === "accept"
+              ? `Accepted loan request for ${tools.name}`
+              : `Rejected loan request for ${tools.name}`,
+          targetid: loans.id,
+          targetType: TargetType.LOAN,
+        },
+        {
+          userId: session?.user?.id ?? "",
+          action:
+            type === "accept"
+              ? `Updated tool ${tools.name} status to borrowed`
+              : `Updated tool ${tools.name} status to available`,
+          targetid: tools.id,
+          targetType: TargetType.TOOL,
+        },
+      ],
+    });
 
     revalidatePath(`/admin/loans-request`);
     return {
