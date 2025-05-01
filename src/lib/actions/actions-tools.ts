@@ -1,6 +1,6 @@
 "use server";
 
-import { ToolStatus } from "@prisma/client";
+import { TargetType, ToolStatus } from "@prisma/client";
 import { auth } from "../../../auth";
 import { prisma } from "../prisma";
 import { ToolsSchema } from "../zod/zod-tools";
@@ -112,7 +112,7 @@ export const createTools = async (prevState: unknown, formData: FormData) => {
   const { name, description, category, status } = validatedFields.data;
 
   try {
-    await prisma.tool.create({
+    const createdTools = await prisma.tool.create({
       data: {
         name,
         description: description || "",
@@ -120,6 +120,15 @@ export const createTools = async (prevState: unknown, formData: FormData) => {
         status: status as ToolStatus,
         created_by: session?.user?.id ?? "",
         updated_by: session?.user?.id ?? "",
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        userId: session?.user?.id ?? "",
+        action: `Created tool ${createdTools.name}`,
+        targetid: createdTools.id,
+        targetType: TargetType.TOOL,
       },
     });
 
@@ -153,17 +162,27 @@ export const updateTools = async (
   const { name, description, category, status } = validatedFields.data;
 
   try {
-    await prisma.tool.update({
-      where: { id },
-      data: {
-        name,
-        description: description || "",
-        category,
-        status: status as ToolStatus,
-        created_by: session?.user?.id ?? "",
-        updated_by: session?.user?.id ?? "",
-      },
-    });
+    await prisma.$transaction([
+      prisma.tool.update({
+        where: { id },
+        data: {
+          name,
+          description: description || "",
+          category,
+          status: status as ToolStatus,
+          created_by: session?.user?.id ?? "",
+          updated_by: session?.user?.id ?? "",
+        },
+      }),
+      prisma.auditLog.create({
+        data: {
+          userId: session?.user?.id ?? "",
+          action: `Updated tool ${name}`,
+          targetid: id,
+          targetType: TargetType.TOOL,
+        },
+      }),
+    ]);
 
     revalidatePath(`/admin/tools`);
 
@@ -174,14 +193,24 @@ export const updateTools = async (
   }
 };
 
-export const deleteTools = async (id: string) => {
+export const deleteTools = async (id: string, name: string) => {
   const session = await auth();
   if (!session) return { error: { auth: ["User not found"] } };
 
   try {
-    await prisma.tool.delete({
-      where: { id },
-    });
+    await prisma.$transaction([
+      prisma.tool.delete({
+        where: { id },
+      }),
+      prisma.auditLog.create({
+        data: {
+          userId: session?.user?.id ?? "",
+          action: `Deleted tool ${name}`,
+          targetid: id,
+          targetType: TargetType.TOOL,
+        },
+      }),
+    ]);
 
     revalidatePath(`/admin/tools`);
 

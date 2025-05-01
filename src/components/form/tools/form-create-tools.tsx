@@ -51,6 +51,7 @@ const FormCreateTools = ({ onCloseDialog }: { onCloseDialog: () => void }) => {
           <Label htmlFor="description">Description</Label>
           <Textarea
             id="description"
+            name="description"
             placeholder="Enter description..."
             value={formValues.description}
             onChange={(e) =>

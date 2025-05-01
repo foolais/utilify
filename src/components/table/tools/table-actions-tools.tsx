@@ -43,7 +43,7 @@ const TableActionTools = ({
 
   const handleDelete = async () => {
     try {
-      await deleteTools(id);
+      await deleteTools(id, name);
       toast.success("Tools deleted successfully", { duration: 1500 });
     } catch (error) {
       console.error(error);
