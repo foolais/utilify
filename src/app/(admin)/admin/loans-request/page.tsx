@@ -1,9 +1,11 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
+import { TableLoadingSkeleton } from "@/components/skeleton/loading-skeleton";
 import { DataTable } from "@/components/table/data-table";
 import { loansRequestColumns } from "@/components/table/loan-request.tsx/loans-request-columns";
 import TablePagination from "@/components/table/table-pagination";
 import { getAllLoansRequest } from "@/lib/actions/actions-loans-request";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 const LoanRequest = async ({
   searchParams,
@@ -15,17 +17,38 @@ const LoanRequest = async ({
   const p = page ? parseInt(page) : 1;
   if (p === 0) return notFound();
 
-  const { count, data } = await getAllLoansRequest(p, search, "pending");
+  const loansRequestPromise = getAllLoansRequest(p, search, "pending");
 
   return (
     <div>
       <ContainerSearchForm widthClassName="w-3/4 sm:w-[300px] lg:w-[400px]">
         <div></div>
       </ContainerSearchForm>
-      <DataTable columns={loansRequestColumns} data={data ?? []} />
-      <TablePagination currentPage={p} count={count ?? 0} />
+      <Suspense fallback={<TableLoadingSkeleton />}>
+        <DataTableWrapper loansRequestPromise={loansRequestPromise} page={p} />
+      </Suspense>
     </div>
   );
 };
+
+async function DataTableWrapper({
+  loansRequestPromise,
+  page,
+}: {
+  loansRequestPromise: ReturnType<typeof getAllLoansRequest>;
+  page: number;
+}) {
+  const loansRequest = await loansRequestPromise;
+
+  return (
+    <>
+      <DataTable
+        columns={loansRequestColumns}
+        data={loansRequest?.data ?? []}
+      />
+      <TablePagination currentPage={page} count={loansRequest?.count ?? 0} />
+    </>
+  );
+}
 
 export default LoanRequest;
