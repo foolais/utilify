@@ -12,7 +12,13 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, LogOutIcon, Users, WrenchIcon } from "lucide-react";
+import {
+  History,
+  LayoutDashboard,
+  LogOutIcon,
+  Users,
+  WrenchIcon,
+} from "lucide-react";
 import Title from "./title";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -42,6 +48,11 @@ const items = [
         url: "/admin/loans-list",
       },
     ],
+  },
+  {
+    title: "History",
+    url: "/admin/history",
+    icon: History,
   },
 ];
 

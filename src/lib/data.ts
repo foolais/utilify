@@ -22,3 +22,14 @@ export const LOANS_STATUS = [
   { value: "returned", label: "Returned" },
   { value: "overdue", label: "Overdue" },
 ];
+
+export const HISTORY_CATEGORIES = [
+  {
+    value: "tool",
+    label: "Tool",
+  },
+  {
+    value: "loan",
+    label: "Loan",
+  },
+];

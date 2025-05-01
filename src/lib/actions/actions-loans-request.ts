@@ -69,7 +69,7 @@ export const getAllLoansRequest = async (
           prisma.auditLog.create({
             data: {
               userId: session?.user?.id ?? "",
-              action: `Updated status of loan ${loan.tool} to reject`,
+              action: `Updated status of loan ${loan.tool.id} to reject`,
               targetid: loan.id,
               targetType: TargetType.LOAN,
             },
@@ -87,7 +87,7 @@ export const getAllLoansRequest = async (
           prisma.auditLog.create({
             data: {
               userId: session?.user?.id ?? "",
-              action: `Updated status of loan ${loan.tool} to available`,
+              action: `Updated status of loan ${loan.tool.id} to available`,
               targetid: loan.id,
               targetType: TargetType.LOAN,
             },
