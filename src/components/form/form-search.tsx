@@ -99,29 +99,54 @@ const FormSearch = ({
               <CommandInput placeholder={`Search ${name}...`} className="h-9" />
               <CommandList>
                 <CommandEmpty>No {name} found.</CommandEmpty>
-                {categories.map((data) => (
+                {categories.find((item) => item.value === categoryValue) && (
                   <CommandItem
-                    key={data.value}
-                    value={data.value}
+                    key={categoryValue}
+                    value={categoryValue}
                     onSelect={(currentValue) => {
                       setCategoryValue(
                         currentValue === categoryValue ? "" : currentValue,
                       );
                       setOpen(false);
                     }}
-                    className="cursor-pointer"
+                    className="cursor-pointer capitalize"
                   >
-                    {data.label}
+                    {categoryValue}
                     <Check
                       className={cn(
                         "ml-auto",
-                        categoryValue === data.value
+                        categoryValue === categoryValue
                           ? "opacity-100"
                           : "opacity-0",
                       )}
                     />
                   </CommandItem>
-                ))}
+                )}
+                {categories
+                  .filter((item) => item.value !== categoryValue)
+                  .map((data) => (
+                    <CommandItem
+                      key={data.value}
+                      value={data.value}
+                      onSelect={(currentValue) => {
+                        setCategoryValue(
+                          currentValue === categoryValue ? "" : currentValue,
+                        );
+                        setOpen(false);
+                      }}
+                      className="cursor-pointer"
+                    >
+                      {data.label}
+                      <Check
+                        className={cn(
+                          "ml-auto",
+                          categoryValue === data.value
+                            ? "opacity-100"
+                            : "opacity-0",
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
               </CommandList>
             </Command>
           </PopoverContent>
