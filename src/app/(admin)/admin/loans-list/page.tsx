@@ -29,12 +29,7 @@ const AdminBorrowersPage = async ({
 
   return (
     <div>
-      <ContainerSearchForm
-        categoriesData={LOANS_STATUS.filter(
-          (status) => status.value !== "pending",
-        )}
-        name="status"
-      >
+      <ContainerSearchForm categoriesData={LOANS_STATUS} name="status">
         <DialogCreateLoansList />
       </ContainerSearchForm>
       <DataTable columns={loansListColumns} data={data ?? []} />

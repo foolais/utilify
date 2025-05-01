@@ -13,12 +13,26 @@ import { useState } from "react";
 import DialogForm from "../../dialog/dialog-form";
 import FormDetailLoansList from "../../form/loans-list/form-detail-loans-list";
 import FormUpdateLoansList from "../../form/loans-list/form-update-loans-list";
+import { ToolStatus } from "@prisma/client";
 
-const TableActionLoans = ({ index, id }: { index: number; id: string }) => {
+const TableActionLoans = ({
+  index,
+  id,
+  status,
+  toolStatus,
+}: {
+  index: number;
+  id: string;
+  status: string;
+  toolStatus: ToolStatus;
+}) => {
   const [openStatus, setOpenStatus] = useState({
     value: false,
     type: "",
   });
+
+  const pendingRequest =
+    status === "pending" || toolStatus === "pending" ? true : false;
 
   return (
     <>
@@ -39,13 +53,17 @@ const TableActionLoans = ({ index, id }: { index: number; id: string }) => {
             Details
           </DropdownMenuItem>
           <DropdownMenuItem
+            disabled={pendingRequest}
             onClick={() => setOpenStatus({ value: true, type: "update" })}
             className="cursor-pointer"
           >
             <PencilIcon />
             Update
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-destructive cursor-pointer">
+          <DropdownMenuItem
+            disabled={pendingRequest}
+            className="text-destructive cursor-pointer"
+          >
             <Trash2Icon color="red" />
             Delete
           </DropdownMenuItem>

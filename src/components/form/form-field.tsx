@@ -70,6 +70,7 @@ interface ComboboxProps {
   onSearch?: (value: string) => void;
   isQuerySearch?: boolean;
   isLoadingQuery?: boolean;
+  isDisabled?: boolean;
   error?: string[];
 }
 
@@ -84,6 +85,7 @@ export const FormFieldCombobox = ({
   onSearch = () => {},
   isQuerySearch = false,
   isLoadingQuery = false,
+  isDisabled = false,
   error,
 }: ComboboxProps) => {
   const [open, setOpen] = useState(false);
@@ -94,7 +96,7 @@ export const FormFieldCombobox = ({
   const handleInputChange = (value: string) => {
     setInputValue(value);
     if (isQuerySearch) {
-      onSearch(value); // Just call the handler
+      onSearch(value);
     }
   };
 
@@ -109,7 +111,7 @@ export const FormFieldCombobox = ({
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
-            disabled={isLoadingQuery}
+            disabled={isLoadingQuery || isDisabled}
           >
             {selectedItem ? (
               selectedItem?.label

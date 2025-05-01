@@ -17,7 +17,7 @@ export const getLoansById = async (id: string) => {
         id: true,
         email: true,
         toolId: true,
-        tool: { select: { id: true, name: true } },
+        tool: { select: { id: true, name: true, status: true } },
         return_date: true,
         loan_date: true,
         status: true,
@@ -99,9 +99,14 @@ export const createLoansList = async (
 };
 
 export const updateLoansList = async (
+  id: string,
+  isAvailableTools: boolean,
   prevState: unknown,
   formData: FormData,
 ) => {
+  const session = await auth();
+  if (!session) return { error: { auth: ["User not found"] } };
+
   const validatedFields = LoansListSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -114,7 +119,54 @@ export const updateLoansList = async (
 
   const { email, tools, loan_date, return_date, status } = validatedFields.data;
 
-  console.log({ email, tools, loan_date, return_date, status });
+  const pendingLoanStatus = status === "pennding";
+  const borrowedLoanStatus = status === "borrowed" || status === "overdue";
 
-  return { success: true, message: "Loans updated successfully" };
+  const toolStatus = pendingLoanStatus
+    ? "pending"
+    : borrowedLoanStatus
+      ? "borrowed"
+      : "available";
+
+  try {
+    if (isAvailableTools) {
+      await prisma.$transaction([
+        prisma.loan.update({
+          where: { id },
+          data: {
+            email,
+            toolId: tools,
+            loan_date: new Date(loan_date),
+            return_date: new Date(return_date),
+            status: status as LoanStatus,
+            updated_by: session?.user?.id ?? "",
+          },
+        }),
+        prisma.tool.update({
+          where: { id: tools },
+          data: {
+            status: toolStatus,
+          },
+        }),
+      ]);
+    } else if (!isAvailableTools) {
+      await prisma.loan.update({
+        where: { id },
+        data: {
+          email,
+          toolId: tools,
+          loan_date: new Date(loan_date),
+          return_date: new Date(return_date),
+          status: status as LoanStatus,
+          updated_by: session?.user?.id ?? "",
+        },
+      });
+    }
+
+    revalidatePath(`/admin/loans-list`);
+    return { success: true, message: "Loans updated successfully" };
+  } catch (error) {
+    console.log({ error });
+    return { error: { error: [error] } };
+  }
 };

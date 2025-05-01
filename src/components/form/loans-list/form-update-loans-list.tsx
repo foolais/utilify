@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import moment from "moment";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { LOANS_STATUS } from "@/lib/data";
 import { debounce } from "lodash";
@@ -51,10 +51,15 @@ const FormUpdateLoansList = ({
   });
 
   const [toolsValue, setToolsValue] = useState("");
-  const [toolsData, setToolsData] = useState<iToolData[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [toolsData, setToolsData] = useState<iToolData[]>([]);
+  const [loanStatusData, setLoanStatusData] = useState(LOANS_STATUS);
+  const [isAvailableTools, setIsAvailableTools] = useState(true);
 
-  const [state, formAction, isPending] = useActionState(updateLoansList, null);
+  const [state, formAction, isPending] = useActionState(
+    updateLoansList.bind(null, id, isAvailableTools),
+    null,
+  );
   const hasRun = useRef(false);
 
   // Memoized debounced fetch function
@@ -66,7 +71,7 @@ const FormUpdateLoansList = ({
           const { data } = await getAllTools(
             1,
             encodeURIComponent(query),
-            query,
+            "",
             "available",
             5,
           );
@@ -124,8 +129,32 @@ const FormUpdateLoansList = ({
           status: loanData.status,
         });
 
-        setToolsValue(loanData.tool.id);
+        // filtering combobox options
+        if (loanData.tool.status === "borrowed") {
+          setLoanStatusData(
+            LOANS_STATUS.filter(
+              (status) =>
+                status.value === "borrowed" ||
+                status.value === "returned" ||
+                status.value === "overdue",
+            ),
+          );
+        } else if (loanData.status === "rejected") {
+          setLoanStatusData(
+            LOANS_STATUS.filter(
+              (status) =>
+                status.value === "rejected" ||
+                status.value === "pending" ||
+                status.value === "borrowed",
+            ),
+          );
+        }
 
+        if (loanData.tool.status !== "available") {
+          setIsAvailableTools(false);
+        }
+
+        setToolsValue(loanData.tool.id);
         await debouncedFetchTools("", loanData.tool.name, loanData.tool.id);
       } catch (error) {
         console.error("Initialization error:", error);
@@ -145,7 +174,7 @@ const FormUpdateLoansList = ({
   }, [state, onCloseDialog]);
 
   return (
-    <form id="form-create-loans" action={formAction}>
+    <form id="form-update-loans-list" action={formAction}>
       <div className="grid w-full items-center gap-4">
         <FormFieldInput
           name="email"
@@ -158,6 +187,7 @@ const FormUpdateLoansList = ({
           placeholder="Enter email..."
         />
         <FormFieldCombobox
+          isDisabled={!isAvailableTools}
           name="tools"
           label="Tools"
           placeholder="Select tools"
@@ -278,7 +308,7 @@ const FormUpdateLoansList = ({
           name="status"
           label="Status"
           placeholder="Select status"
-          data={LOANS_STATUS}
+          data={loanStatusData}
           value={formValues.status}
           setValue={() => setFormValues((prev) => ({ ...prev, status: "" }))}
           onChangeForm={(val) =>
@@ -290,8 +320,9 @@ const FormUpdateLoansList = ({
         />
       </div>
       <div className="mt-4 flex items-center justify-end">
-        <Button disabled={isPending} form="form-create-loans">
-          Create
+        <Button disabled={isPending} form="form-update-loans-list">
+          Update{" "}
+          {isPending && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
         </Button>
       </div>
     </form>

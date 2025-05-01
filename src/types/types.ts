@@ -32,6 +32,7 @@ export type LoansList = {
   id: string;
   email: string;
   tools: string;
+  toolStatus: ToolStatus;
   loan_date: Date;
   return_date: Date;
   status: LoanStatus;

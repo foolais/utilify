@@ -39,7 +39,6 @@ const TableActionLoansRequest = ({
     setCurrentAction(type);
     try {
       const res = await updateLoanRequest(type, id, toolId);
-      console.log({ res });
       if (res.success) toast.success(res.message, { duration: 1500 });
 
       if (type === "accept") {

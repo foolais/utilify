@@ -124,7 +124,7 @@ export const getAllLoansRequest = async (
         id: true,
         email: true,
         toolId: true,
-        tool: { select: { name: true, category: true } },
+        tool: { select: { name: true, category: true, status: true } },
         return_date: true,
         loan_date: true,
         status: true,
@@ -155,6 +155,7 @@ export const getAllLoansRequest = async (
   const data = loans.map((loan, index) => ({
     no: (currentPage - 1) * pageSize + (index + 1),
     tools: loan.tool.name,
+    toolStatus: loan.tool.status,
     ...loan,
   }));
 
