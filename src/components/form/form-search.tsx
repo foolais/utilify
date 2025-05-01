@@ -49,9 +49,18 @@ const FormSearch = ({
     const status = searchParams.get("status") || "";
 
     setSearchValue(search);
-    if (name === "category") setCategoryValue(category);
-    else if (name === "status") setCategoryValue(status);
-  }, [searchParams, name]);
+    if (name === "category") {
+      const isValidCategory = categories?.some(
+        (categoryData) => categoryData.label.toLocaleLowerCase() === category,
+      );
+      setCategoryValue(isValidCategory ? category : "");
+    } else if (name === "status") {
+      const isValidStatus = categories?.some(
+        (categoryData) => categoryData.label.toLocaleLowerCase() === status,
+      );
+      setCategoryValue(isValidStatus ? status : "");
+    }
+  }, [searchParams, name, categories]);
 
   return (
     <div
