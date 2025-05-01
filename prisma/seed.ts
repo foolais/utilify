@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TargetType } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -14,8 +14,8 @@ async function main() {
   // const statuses = ["available"] as const;
   const categories = ["hardware", "software", "accessory"] as const;
 
-  const tools = Array.from({ length: 15 }).map((_, index) => ({
-    name: `Tool ${index + 1}`,
+  const tools = Array.from({ length: 5 }).map((_, index) => ({
+    name: `Tool ${index + 50}`,
     description: `Description for Tool ${index + 1}`,
     category: categories[index % categories.length],
     status: statuses[index % statuses.length],
@@ -23,8 +23,21 @@ async function main() {
     updated_by: user.id,
   }));
 
-  await prisma.tool.createMany({
-    data: tools,
+  // First, create the tools
+  const createdTools = await prisma.$transaction(
+    tools.map((tool) => prisma.tool.create({ data: tool })),
+  );
+
+  // Then create audit logs for each tool creation
+  const auditLogs = createdTools.map((tool) => ({
+    userId: user.id,
+    action: `Created tool ${tool.name}`,
+    targetid: tool.id,
+    targetType: TargetType.TOOL,
+  }));
+
+  await prisma.auditLog.createMany({
+    data: auditLogs,
   });
 
   console.log("Seeding 15 tools complete.");
