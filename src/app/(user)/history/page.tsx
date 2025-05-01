@@ -1,4 +1,5 @@
 import ContainerSearchForm from "@/components/container/container-search-form";
+import { TableLoadingSkeleton } from "@/components/skeleton/loading-skeleton";
 import { DataTable } from "@/components/table/data-table";
 import { historyColumns } from "@/components/table/history/history-columns";
 import TablePagination from "@/components/table/table-pagination";
@@ -6,6 +7,7 @@ import { getAllLoansRequest } from "@/lib/actions/actions-loans-request";
 import { LOANS_STATUS } from "@/lib/data";
 import { LoanStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 const HistoryPage = async ({
   searchParams,
@@ -22,7 +24,7 @@ const HistoryPage = async ({
 
   if (status && !validStatuses.includes(status)) return notFound();
 
-  const { count, data } = await getAllLoansRequest(
+  const historyPromise = getAllLoansRequest(
     p,
     search,
     status as LoanStatus | undefined,
@@ -38,11 +40,29 @@ const HistoryPage = async ({
         />
       </div>
       <div className="sm:px-4 md:px-6">
-        <DataTable columns={historyColumns} data={data ?? []} />
-        <TablePagination currentPage={p} count={count ?? 0} />
+        <Suspense fallback={<TableLoadingSkeleton />}>
+          <DataTableWrapper historyPromise={historyPromise} page={p} />
+        </Suspense>
       </div>
     </>
   );
 };
+
+async function DataTableWrapper({
+  historyPromise,
+  page,
+}: {
+  historyPromise: ReturnType<typeof getAllLoansRequest>;
+  page: number;
+}) {
+  const history = await historyPromise;
+
+  return (
+    <>
+      <DataTable columns={historyColumns} data={history?.data ?? []} />
+      <TablePagination currentPage={page} count={history?.count ?? 0} />
+    </>
+  );
+}
 
 export default HistoryPage;
