@@ -1,6 +1,6 @@
 "use server";
 
-import { LoanStatus } from "@prisma/client";
+import { LoanStatus, TargetType } from "@prisma/client";
 import { auth } from "../../../auth";
 import { prisma } from "../prisma";
 import { LoansListSchema } from "../zod/zod-loans-list";
@@ -78,7 +78,7 @@ export const createLoansList = async (
   };
 
   try {
-    await prisma.$transaction([
+    const [loansCreated, toolsCreated] = await prisma.$transaction([
       prisma.loan.create({
         data: payload,
       }),
@@ -89,6 +89,23 @@ export const createLoansList = async (
         },
       }),
     ]);
+
+    await prisma.auditLog.createMany({
+      data: [
+        {
+          userId: session?.user?.id ?? "",
+          action: `Created loan for ${toolsCreated.name}`,
+          targetid: loansCreated.id,
+          targetType: TargetType.LOAN,
+        },
+        {
+          userId: session?.user?.id ?? "",
+          action: `Updated status of tool ${toolsCreated.name} to ${toolsStatus}`,
+          targetid: toolsCreated.id,
+          targetType: TargetType.TOOL,
+        },
+      ],
+    });
 
     revalidatePath(`/admin/loans-list`);
     return { success: true, message: "Loan created successfully" };
@@ -118,6 +135,8 @@ export const updateLoansList = async (
   }
 
   const { email, tools, loan_date, return_date, status } = validatedFields.data;
+  const toolsData = await prisma.tool.findUnique({ where: { id: tools } });
+  if (!toolsData) return { error: { notFound: ["Tool not found"] } };
 
   const pendingLoanStatus = status === "pennding";
   const borrowedLoanStatus = status === "borrowed" || status === "overdue";
@@ -130,7 +149,7 @@ export const updateLoansList = async (
 
   try {
     if (isAvailableTools) {
-      await prisma.$transaction([
+      const [loanUpdate, toolUpdate] = await prisma.$transaction([
         prisma.loan.update({
           where: { id },
           data: {
@@ -149,6 +168,23 @@ export const updateLoansList = async (
           },
         }),
       ]);
+
+      await prisma.auditLog.createMany({
+        data: [
+          {
+            userId: session?.user?.id ?? "",
+            action: `Updated loan for tool ${toolsData.name}`,
+            targetid: loanUpdate.id,
+            targetType: TargetType.LOAN,
+          },
+          {
+            userId: session?.user?.id ?? "",
+            action: `Updated status of tool ${toolsData.name} to ${toolStatus}`,
+            targetid: toolUpdate.id,
+            targetType: TargetType.TOOL,
+          },
+        ],
+      });
     } else if (!isAvailableTools) {
       await prisma.loan.update({
         where: { id },
@@ -161,6 +197,14 @@ export const updateLoansList = async (
           updated_by: session?.user?.id ?? "",
         },
       });
+      await prisma.auditLog.create({
+        data: {
+          userId: session?.user?.id ?? "",
+          action: `Updated loan for ${toolsData.name}`,
+          targetid: id,
+          targetType: TargetType.LOAN,
+        },
+      });
     }
 
     revalidatePath(`/admin/loans-list`);
@@ -171,14 +215,24 @@ export const updateLoansList = async (
   }
 };
 
-export const deleteLoansList = async (id: string) => {
+export const deleteLoansList = async (id: string, toolName: string) => {
   const session = await auth();
   if (!session) return { error: { auth: ["User not found"] } };
 
   try {
-    await prisma.loan.delete({
-      where: { id },
-    });
+    await prisma.$transaction([
+      prisma.loan.delete({
+        where: { id },
+      }),
+      prisma.auditLog.create({
+        data: {
+          userId: session?.user?.id ?? "",
+          action: `Deleted loan for ${toolName}`,
+          targetid: id,
+          targetType: TargetType.LOAN,
+        },
+      }),
+    ]);
 
     revalidatePath(`/admin/loans-list`);
 

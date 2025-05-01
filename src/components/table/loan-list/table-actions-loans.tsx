@@ -31,11 +31,13 @@ import { deleteLoansList } from "@/lib/actions/actions-loans-list";
 const TableActionLoans = ({
   index,
   id,
+  toolName,
   status,
   toolStatus,
 }: {
   index: number;
   id: string;
+  toolName: string;
   status: string;
   toolStatus: ToolStatus;
 }) => {
@@ -49,7 +51,7 @@ const TableActionLoans = ({
 
   const handleDelete = async () => {
     try {
-      await deleteLoansList(id);
+      await deleteLoansList(id, toolName);
       toast.success("Tools deleted successfully", { duration: 1500 });
     } catch (error) {
       console.error(error);
