@@ -80,7 +80,7 @@ const TableActionLoans = ({
         }
       >
         {openStatus.type === "detail" ? (
-          <FormDetailLoansList />
+          <FormDetailLoansList id={id} />
         ) : openStatus.type === "update" ? (
           <FormUpdateLoansList
             id={id}

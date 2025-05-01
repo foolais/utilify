@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FormFieldInput } from "../form-field";
-import moment from "moment";
+import { getLoansById } from "@/lib/actions/actions-loans-list";
+import { formatDate } from "@/lib/utils";
 
 interface iFormLoans {
   email: string;
@@ -10,7 +11,7 @@ interface iFormLoans {
   status: string;
 }
 
-const FormDetailLoansList = () => {
+const FormDetailLoansList = ({ id }: { id: string }) => {
   const [formValues, setFormValues] = useState<iFormLoans>({
     email: "",
     tools: "",
@@ -20,14 +21,26 @@ const FormDetailLoansList = () => {
   });
 
   useEffect(() => {
-    setFormValues({
-      email: "mizuki@mizuki.com",
-      tools: "Monitor",
-      loan_date: "Wed Apr 09 2025 00:00:00 GMT+0700 (Western Indonesia Time)",
-      return_date: "Sat Apr 19 2025 00:00:00 GMT+0700 (Western Indonesia Time)",
-      status: "available",
-    });
-  }, []);
+    const getData = async () => {
+      try {
+        const loanData = await getLoansById(id);
+
+        if ("error" in loanData) return;
+
+        setFormValues({
+          email: loanData.email ?? "",
+          tools: loanData.tool.name ?? "",
+          loan_date: formatDate(loanData.loan_date),
+          return_date: formatDate(loanData.return_date),
+          status: loanData.status,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getData();
+  }, [id]);
 
   return (
     <form id="form-create-loans">
@@ -49,14 +62,14 @@ const FormDetailLoansList = () => {
         <FormFieldInput
           name="loan_date"
           label="Loan Date"
-          value={moment(formValues.loan_date).format("LL")}
+          value={formValues.loan_date}
           placeholder="Enter loan date..."
           disabled
         />
         <FormFieldInput
           name="return_date"
           label="Return Date"
-          value={moment(formValues.return_date).format("LL")}
+          value={formValues.return_date}
           placeholder="Enter return date..."
           disabled
         />
