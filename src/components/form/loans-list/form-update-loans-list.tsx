@@ -57,7 +57,7 @@ const FormUpdateLoansList = ({
   const [isAvailableTools, setIsAvailableTools] = useState(true);
 
   const [state, formAction, isPending] = useActionState(
-    updateLoansList.bind(null, id, isAvailableTools),
+    updateLoansList.bind(null, id),
     null,
   );
   const hasRun = useRef(false);

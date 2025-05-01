@@ -117,7 +117,6 @@ export const createLoansList = async (
 
 export const updateLoansList = async (
   id: string,
-  isAvailableTools: boolean,
   prevState: unknown,
   formData: FormData,
 ) => {
@@ -148,7 +147,10 @@ export const updateLoansList = async (
       : "available";
 
   try {
-    if (isAvailableTools) {
+    if (
+      toolsData.status === "available" ||
+      (toolsData.status === "borrowed" && status === "returned")
+    ) {
       const [loanUpdate, toolUpdate] = await prisma.$transaction([
         prisma.loan.update({
           where: { id },
@@ -185,7 +187,7 @@ export const updateLoansList = async (
           },
         ],
       });
-    } else if (!isAvailableTools) {
+    } else {
       await prisma.loan.update({
         where: { id },
         data: {
