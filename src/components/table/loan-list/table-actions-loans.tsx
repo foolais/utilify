@@ -14,6 +14,19 @@ import DialogForm from "../../dialog/dialog-form";
 import FormDetailLoansList from "../../form/loans-list/form-detail-loans-list";
 import FormUpdateLoansList from "../../form/loans-list/form-update-loans-list";
 import { ToolStatus } from "@prisma/client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { deleteLoansList } from "@/lib/actions/actions-loans-list";
 
 const TableActionLoans = ({
   index,
@@ -33,6 +46,15 @@ const TableActionLoans = ({
 
   const pendingRequest =
     status === "pending" || toolStatus === "pending" ? true : false;
+
+  const handleDelete = async () => {
+    try {
+      await deleteLoansList(id);
+      toast.success("Tools deleted successfully", { duration: 1500 });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -60,13 +82,35 @@ const TableActionLoans = ({
             <PencilIcon />
             Update
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={pendingRequest}
-            className="text-destructive cursor-pointer"
-          >
-            <Trash2Icon color="red" />
-            Delete
-          </DropdownMenuItem>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                className="text-destructive cursor-pointer"
+                onSelect={(e) => e.preventDefault()}
+                disabled={pendingRequest}
+              >
+                <Trash2Icon color="red" />
+                Delete
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-red-500">
+                  {`Are you sure to delete No ${index + 1}?`}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently reject the
+                  loan
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>
+                  Yes
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogForm

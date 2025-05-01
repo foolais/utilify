@@ -170,3 +170,21 @@ export const updateLoansList = async (
     return { error: { error: [error] } };
   }
 };
+
+export const deleteLoansList = async (id: string) => {
+  const session = await auth();
+  if (!session) return { error: { auth: ["User not found"] } };
+
+  try {
+    await prisma.loan.delete({
+      where: { id },
+    });
+
+    revalidatePath(`/admin/loans-list`);
+
+    return { success: true, message: "Loan deleted successfully" };
+  } catch (error) {
+    console.log({ error });
+    return { error: { error: [error] } };
+  }
+};
