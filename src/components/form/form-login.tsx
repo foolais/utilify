@@ -28,7 +28,6 @@ const FormLogin = ({ onToggleForm }: { onToggleForm: () => void }) => {
   const [state, formAction, isPending] = useActionState(loginCredentials, null);
 
   useEffect(() => {
-    console.log({ state });
     if (state && state.error && state.message)
       toast.error(state.message, { duration: 1500 });
   }, [state]);

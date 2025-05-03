@@ -100,7 +100,7 @@ export const createLoansList = async (
         },
         {
           userId: session?.user?.id ?? "",
-          action: `Updated status of tool ${toolsCreated.name} to ${toolsStatus}`,
+          action: `Auto Updated status of tool ${toolsCreated.name} to ${toolsStatus}`,
           targetid: toolsCreated.id,
           targetType: TargetType.TOOL,
         },
@@ -181,7 +181,7 @@ export const updateLoansList = async (
           },
           {
             userId: session?.user?.id ?? "",
-            action: `Updated status of tool ${toolsData.name} to ${toolStatus}`,
+            action: `Auto Updated status of tool ${toolsData.name} to ${toolStatus}`,
             targetid: toolUpdate.id,
             targetType: TargetType.TOOL,
           },

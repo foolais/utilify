@@ -1,8 +1,18 @@
+import { redirect } from "next/navigation";
 import { auth } from "../../../auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { headers } from "next/headers";
 
 const UserAvatar = async () => {
   const session = await auth();
+
+  const headersList = await headers();
+  const pathname = headersList.get("x-url") || "";
+
+  if (!session) return redirect("/auth");
+  if (pathname.includes("/admin") && session.user?.role !== "admin") {
+    return redirect("/dashboard");
+  }
 
   return (
     <div className="flex-center gap-2">

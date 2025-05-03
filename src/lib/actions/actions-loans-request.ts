@@ -69,7 +69,7 @@ export const getAllLoansRequest = async (
           prisma.auditLog.create({
             data: {
               userId: session?.user?.id ?? "",
-              action: `Updated status of loan ${loan.tool.id} to reject`,
+              action: `Auto Updated status of loan ${loan.tool.id} to reject`,
               targetid: loan.id,
               targetType: TargetType.LOAN,
             },
@@ -87,7 +87,7 @@ export const getAllLoansRequest = async (
           prisma.auditLog.create({
             data: {
               userId: session?.user?.id ?? "",
-              action: `Updated status of loan ${loan.tool.id} to available`,
+              action: `Auto Updated status of loan ${loan.tool.id} to available`,
               targetid: loan.id,
               targetType: TargetType.LOAN,
             },
@@ -121,7 +121,7 @@ export const getAllLoansRequest = async (
           prisma.auditLog.create({
             data: {
               userId: session?.user?.id ?? "",
-              action: `Updated status ofloan ${loan.tool} to overdue`,
+              action: `Auto Updated status ofloan ${loan.tool} to overdue`,
               targetid: loan.id,
               targetType: TargetType.LOAN,
             },
@@ -245,7 +245,7 @@ export const createLoanRequest = async (
         },
         {
           userId: session?.user?.id ?? "",
-          action: `Updated status of tool ${tools.name} to pending`,
+          action: `Auto Updated status of tool ${tools.name} to pending`,
           targetid: tools.id,
           targetType: TargetType.TOOL,
         },
@@ -301,8 +301,8 @@ export const updateLoanRequest = async (
           userId: session?.user?.id ?? "",
           action:
             type === "accept"
-              ? `Updated status of tool ${tools.name} to borrowed`
-              : `Updated status of tool ${tools.name} to available`,
+              ? `Auto Updated status of tool ${tools.name} to borrowed`
+              : `Auto Updated status of tool ${tools.name} to available`,
           targetid: tools.id,
           targetType: TargetType.TOOL,
         },
