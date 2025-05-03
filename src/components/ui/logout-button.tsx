@@ -21,7 +21,7 @@ const LogoutButton = ({ isCollapsed }: { isCollapsed: boolean }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" className="flex w-full justify-start">
           <LogOutIcon color="red" />
           <span className={isCollapsed ? "hidden" : ""}>Logout</span>
         </Button>

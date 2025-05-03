@@ -120,9 +120,7 @@ export function AppSidebar() {
           <SidebarMenuItem
             className={cn("flex", isCollapsed ? "mx-auto" : "justify-start")}
           >
-            <SidebarMenuButton className="cursor-pointer">
-              <LogoutButton isCollapsed={isCollapsed} />
-            </SidebarMenuButton>
+            <LogoutButton isCollapsed={isCollapsed} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

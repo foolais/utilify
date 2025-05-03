@@ -22,7 +22,8 @@ const AuthPage = () => {
         router.push("/dashboard");
       }
     }
-  }, [session, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
   return (
     <div className="flex-center h-dvh">
