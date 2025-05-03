@@ -1,9 +1,8 @@
 import CardData from "@/components/card/card-data";
 import { getDashboardData } from "@/lib/actions/actions-dashboard";
 import { FileText, Info, List, TriangleAlert, WrenchIcon } from "lucide-react";
-import { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Admin Dashboard | Utilify App",
   description: "Utilify App Dashboard for admin",
 };

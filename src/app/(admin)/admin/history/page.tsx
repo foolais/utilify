@@ -6,11 +6,10 @@ import TablePagination from "@/components/table/table-pagination";
 import { getAllAdminHistory } from "@/lib/actions/actions-admin-history";
 import { HISTORY_CATEGORIES } from "@/lib/data";
 import { TargetType } from "@prisma/client";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Admin History | Utilify App",
   description: "Utilify App History for admin",
 };

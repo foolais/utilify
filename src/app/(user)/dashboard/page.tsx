@@ -3,10 +3,9 @@ import ContainerSearchForm from "@/components/container/container-search-form";
 import TablePagination from "@/components/table/table-pagination";
 import { getAllTools } from "@/lib/actions/actions-tools";
 import { TOOLS_CATEGORIES } from "@/lib/data";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Dashboard | Utilify App",
   description: "Utilify App Dashboard for user",
 };

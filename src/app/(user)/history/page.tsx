@@ -6,11 +6,10 @@ import TablePagination from "@/components/table/table-pagination";
 import { getAllLoansRequest } from "@/lib/actions/actions-loans-request";
 import { LOANS_STATUS } from "@/lib/data";
 import { LoanStatus } from "@prisma/client";
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "History | Utilify App",
   description: "Utilify App History for user",
 };
