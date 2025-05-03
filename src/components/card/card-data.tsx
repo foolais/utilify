@@ -31,14 +31,14 @@ const CardData = ({
   };
 
   return (
-    <Card className={cn(`flex gap-2 p-4`, variantClasses[variant])}>
-      <CardTitle className="flex items-center gap-2 text-xl text-gray-700">
+    <Card className={cn(`flex gap-2 px-4 py-6`, variantClasses[variant])}>
+      <CardTitle className="flex items-center gap-2 text-lg text-gray-700">
         {children}
       </CardTitle>
       {isWithCount && (
         <>
           <Separator className={separatorClasses[variant]} />
-          <p className="text-2xl font-bold text-gray-950 lg:text-3xl">
+          <p className="text-xl font-semibold text-gray-950 lg:text-3xl">
             {countData}
           </p>
         </>

@@ -1,4 +1,4 @@
-import { PrismaClient, TargetType } from "@prisma/client";
+import { PrismaClient, TargetType } from "../src/generated/client";
 
 const prisma = new PrismaClient();
 
@@ -14,8 +14,8 @@ async function main() {
   // const statuses = ["available"] as const;
   const categories = ["hardware", "software", "accessory"] as const;
 
-  const tools = Array.from({ length: 5 }).map((_, index) => ({
-    name: `Tool ${index + 50}`,
+  const tools = Array.from({ length: 2 }).map((_, index) => ({
+    name: `Tool ${index + 91}`,
     description: `Description for Tool ${index + 1}`,
     category: categories[index % categories.length],
     status: statuses[index % statuses.length],
@@ -40,7 +40,7 @@ async function main() {
     data: auditLogs,
   });
 
-  console.log("Seeding 15 tools complete.");
+  console.log("Seeding 2 tools complete.");
 }
 
 main()

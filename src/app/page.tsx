@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <Button variant="outline" className="w-full bg-red-500 text-3xl">
-        Button
-      </Button>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/auth");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <div></div>;
 }
