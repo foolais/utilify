@@ -77,9 +77,9 @@ export const loginCredentials = async (
     if (error instanceof AuthError) {
       switch (error.name) {
         case "CredentialsSignin":
-          return { message: "Invalid email or password" };
+          return { error: true, message: "Invalid email or password" };
         default:
-          return { message: "Authentication failed" };
+          return { error: true, message: "Authentication failed" };
       }
     }
     throw error;

@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/card";
 import Title from "@/components/ui/title";
 import { loginCredentials } from "@/lib/actions/actions-auth";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { FormFieldInput } from "./form-field";
+import { toast } from "sonner";
 
 interface iFormLogin {
   email: string;
@@ -25,6 +26,12 @@ const FormLogin = ({ onToggleForm }: { onToggleForm: () => void }) => {
   });
 
   const [state, formAction, isPending] = useActionState(loginCredentials, null);
+
+  useEffect(() => {
+    console.log({ state });
+    if (state && state.error && state.message)
+      toast.error(state.message, { duration: 1500 });
+  }, [state]);
 
   return (
     <Card className="w-[350px]">
@@ -43,7 +50,9 @@ const FormLogin = ({ onToggleForm }: { onToggleForm: () => void }) => {
               value={(formValues as iFormLogin).email}
               setFormValues={setFormValues}
               error={
-                state?.error && "email" in state.error ? state.error.email : []
+                typeof state?.error === "object" && "email" in state.error
+                  ? state.error.email
+                  : []
               }
               placeholder="johndoe@me.com"
               type="email"
@@ -54,7 +63,7 @@ const FormLogin = ({ onToggleForm }: { onToggleForm: () => void }) => {
               value={(formValues as iFormLogin).password}
               setFormValues={setFormValues}
               error={
-                state?.error && "password" in state.error
+                typeof state?.error === "object" && "password" in state.error
                   ? state.error.password
                   : []
               }

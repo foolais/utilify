@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn, getDayBefore } from "@/lib/utils";
+import { cn, getDayAfter } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -39,7 +39,7 @@ const FormCreateLoansRequest = ({
     tools: name,
     description: description,
     loan_date: new Date(),
-    return_date: new Date(),
+    return_date: getDayAfter(),
   });
 
   const [state, formAction, isPending] = useActionState(
@@ -119,9 +119,7 @@ const FormCreateLoansRequest = ({
                   }
                 }}
                 initialFocus
-                disabled={(date) => {
-                  return date < getDayBefore();
-                }}
+                disabled={(date) => date < getDayAfter()}
               />
             </PopoverContent>
           </Popover>

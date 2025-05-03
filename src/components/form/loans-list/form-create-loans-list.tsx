@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, getDayAfter } from "@/lib/utils";
 import moment from "moment";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
@@ -41,7 +41,7 @@ const FormCreateLoansList = ({
     email: "",
     tools: "",
     loan_date: new Date(),
-    return_date: new Date(),
+    return_date: getDayAfter(),
     status: "",
   });
 

@@ -10,11 +10,11 @@ export function truncateText(text: string, length: number) {
   return text.length > length ? text.slice(0, length) + "..." : text;
 }
 
-export function getDayBefore() {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+export function getDayAfter() {
+  const tommorow = new Date();
+  tommorow.setDate(tommorow.getDate() + 1);
 
-  return yesterday;
+  return tommorow;
 }
 
 export function formatDate(date: Date) {
