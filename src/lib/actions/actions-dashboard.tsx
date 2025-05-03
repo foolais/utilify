@@ -11,6 +11,7 @@ export const getDashboardData = async () => {
     const [auditLogs, toolCount, loanRequestCount, loanListCount] =
       await prisma.$transaction([
         prisma.auditLog.findMany({
+          select: { id: true, action: true },
           orderBy: { createdAt: "desc" },
           take: 3,
         }),

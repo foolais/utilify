@@ -1,12 +1,16 @@
 import CardData from "@/components/card/card-data";
 import { getDashboardData } from "@/lib/actions/actions-dashboard";
-import { AuditLog } from "@prisma/client";
 import { FileText, Info, List, TriangleAlert, WrenchIcon } from "lucide-react";
 
 export const metadata = {
   title: "Admin Dashboard | Utilify App",
   description: "Utilify App Dashboard for admin",
 };
+
+interface iLog {
+  id: string;
+  action: string;
+}
 
 const AdminDashboardPage = async () => {
   const { auditLogs, toolCount, loanRequestCount, loanListCount } =
@@ -50,7 +54,7 @@ const AdminDashboardPage = async () => {
           <h2 className="my-2 text-2xl font-semibold">Recent Activity</h2>
           {auditLogs && auditLogs?.length > 0 ? (
             <div className="space-y-4">
-              {auditLogs.map((log: AuditLog) => (
+              {auditLogs.map((log: iLog) => (
                 <CardData key={log.id} isWithCount={false} variant="secondary">
                   <>
                     <Info />
