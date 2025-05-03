@@ -14,10 +14,11 @@ const AuthPage = () => {
   const handleToggleForm = () => setIsFormLogin((prev) => !prev);
 
   useEffect(() => {
+    console.log({ session });
     if (session) {
       if (session.user?.role === "admin") {
         router.push("/admin/dashboard");
-      } else {
+      } else if (session.user?.role === "user") {
         router.push("/dashboard");
       }
     }

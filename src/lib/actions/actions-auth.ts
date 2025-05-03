@@ -3,7 +3,7 @@
 import { LoginSchema, RegisterSchema } from "@/lib/zod/zod-auth";
 import { hashSync } from "bcrypt-ts";
 import { prisma } from "@/lib/prisma";
-import { signIn } from "../../../auth";
+import { signIn, signOut } from "../../../auth";
 import { AuthError } from "next-auth";
 
 export const registerCredentials = async (
@@ -83,5 +83,13 @@ export const loginCredentials = async (
       }
     }
     throw error;
+  }
+};
+
+export const logoutCredentials = async () => {
+  try {
+    await signOut();
+  } catch (error) {
+    console.log(error);
   }
 };

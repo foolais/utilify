@@ -12,16 +12,11 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  History,
-  LayoutDashboard,
-  LogOutIcon,
-  Users,
-  WrenchIcon,
-} from "lucide-react";
+import { History, LayoutDashboard, Users, WrenchIcon } from "lucide-react";
 import Title from "./title";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import LogoutButton from "./logout-button";
 
 const items = [
   {
@@ -126,8 +121,7 @@ export function AppSidebar() {
             className={cn("flex", isCollapsed ? "mx-auto" : "justify-start")}
           >
             <SidebarMenuButton className="cursor-pointer">
-              <LogOutIcon color="red" />
-              <span className={isCollapsed ? "hidden" : ""}>Logout</span>
+              <LogoutButton isCollapsed={isCollapsed} />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
