@@ -18,9 +18,11 @@ const AdminDashboardPage = async () => {
 
   return (
     <div className="my-4">
-      <h1 className="mt-4 mb-8 text-3xl font-semibold">Welcome to Utilify</h1>
+      <h1 className="my-4 text-2xl font-semibold tracking-wider">
+        Welcome to Utilify
+      </h1>
       <div>
-        <h2 className="my-2 text-xl font-semibold">Overview</h2>
+        <h2 className="my-2 text-lg font-semibold">Overview</h2>
         <div className="grid max-w-[1000px] grid-cols-2 gap-4 md:grid-cols-3">
           {toolCount && (
             <CardData countData={`${toolCount} Tools`} variant="primary">
@@ -51,14 +53,14 @@ const AdminDashboardPage = async () => {
           )}
         </div>
         <div className="my-6 max-w-[1500px] space-y-4">
-          <h2 className="my-2 text-xl font-semibold">Recent Activity</h2>
+          <h2 className="my-2 text-lg font-semibold">Recent Activity</h2>
           {auditLogs && auditLogs?.length > 0 ? (
             <div className="space-y-4">
               {auditLogs.map((log: iLog) => (
                 <CardData key={log.id} isWithCount={false} variant="secondary">
                   <>
                     <Info />
-                    <span className="text-lg">{log.action}</span>
+                    <span className="text-md">{log.action}</span>
                   </>
                 </CardData>
               ))}

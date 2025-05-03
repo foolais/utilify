@@ -17,10 +17,10 @@ const CardData = ({
   variant = "primary",
 }: iProps) => {
   const variantClasses = {
-    primary: "border-2 border-blue-500",
+    primary: "border-[1px] border-blue-500",
     secondary: "bg-primary-500 text-white",
-    success: "border-2 border-green-500",
-    warning: "border-2 border-yellow-500",
+    success: "border-[1px] border-green-500",
+    warning: "border-[1px] border-yellow-500",
   };
 
   const separatorClasses = {
@@ -38,7 +38,7 @@ const CardData = ({
       {isWithCount && (
         <>
           <Separator className={separatorClasses[variant]} />
-          <p className="text-xl font-semibold text-gray-950 lg:text-3xl">
+          <p className="text-xl font-semibold text-gray-950 lg:text-2xl">
             {countData}
           </p>
         </>
