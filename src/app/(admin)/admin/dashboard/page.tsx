@@ -1,6 +1,12 @@
 import CardData from "@/components/card/card-data";
 import { getDashboardData } from "@/lib/actions/actions-dashboard";
 import { FileText, Info, List, TriangleAlert, WrenchIcon } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard | Utilify App",
+  description: "Utilify App Dashboard for admin",
+};
 
 const AdminDashboardPage = async () => {
   const { auditLogs, toolCount, loanRequestCount, loanListCount } =
@@ -48,7 +54,7 @@ const AdminDashboardPage = async () => {
                 <CardData key={log.id} isWithCount={false} variant="secondary">
                   <>
                     <Info />
-                    <span>{log.action}</span>
+                    <span className="text-lg">{log.action}</span>
                   </>
                 </CardData>
               ))}

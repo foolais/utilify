@@ -14,7 +14,7 @@ const AuthPage = () => {
   const handleToggleForm = () => setIsFormLogin((prev) => !prev);
 
   useEffect(() => {
-    console.log({ session });
+    document.title = "Auth | Utilify App";
     if (session) {
       if (session.user?.role === "admin") {
         router.push("/admin/dashboard");
@@ -23,7 +23,7 @@ const AuthPage = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, []);
 
   return (
     <div className="flex-center h-dvh">

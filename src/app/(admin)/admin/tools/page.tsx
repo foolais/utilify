@@ -6,8 +6,14 @@ import TablePagination from "@/components/table/table-pagination";
 import { toolsColumns } from "@/components/table/tools/tools-columns";
 import { getAllTools } from "@/lib/actions/actions-tools";
 import { TOOLS_CATEGORIES } from "@/lib/data";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Tools List | Utilify App",
+  description: "Utilify App Tools List for admin",
+};
 
 const AdminToolsPage = async ({
   searchParams,
