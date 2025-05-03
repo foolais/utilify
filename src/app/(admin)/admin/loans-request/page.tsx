@@ -12,11 +12,11 @@ export const metadata = {
   description: "Utilify App Loans Request for admin",
 };
 
-const LoanRequest = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+interface iProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+const LoanRequest = async ({ searchParams }: iProps) => {
   const { page, search = "" } = await searchParams;
 
   const p = page ? parseInt(page) : 1;

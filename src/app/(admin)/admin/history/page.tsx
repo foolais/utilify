@@ -14,11 +14,11 @@ export const metadata = {
   description: "Utilify App History for admin",
 };
 
-const AdminHistory = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+interface iProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+const AdminHistory = async ({ searchParams }: iProps) => {
   const { page, search = "", category } = await searchParams;
 
   const p = page ? parseInt(page) : 1;

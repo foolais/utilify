@@ -10,11 +10,11 @@ export const metadata = {
   description: "Utilify App Dashboard for user",
 };
 
-const DashboardPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+interface iProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+const DashboardPage = async ({ searchParams }: iProps) => {
   const { page, search = "", category = "" } = await searchParams;
   const p = page ? parseInt(page) : 1;
 

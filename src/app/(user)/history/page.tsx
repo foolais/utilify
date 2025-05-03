@@ -14,11 +14,11 @@ export const metadata = {
   description: "Utilify App History for user",
 };
 
-const HistoryPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+interface iProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+const HistoryPage = async ({ searchParams }: iProps) => {
   const { page, search = "", status } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
