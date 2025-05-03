@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Separator } from "./separator";
 import LogoutButton from "./logout-button";
+import DialogUser from "../dialog/dialog-user";
 
 const UserAvatar = async () => {
   const session = await auth();
@@ -36,6 +37,7 @@ const UserAvatar = async () => {
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-max">
+        <DialogUser />
         <Separator className="my-2" />
         <LogoutButton isCollapsed={false} />
       </PopoverContent>

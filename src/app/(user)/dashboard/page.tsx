@@ -19,7 +19,7 @@ const DashboardPage = async ({
 
   return (
     <div className="px-6">
-      <div className="flex-center mb-2">
+      <div className="flex-center my-2">
         <ContainerSearchForm
           categoriesData={TOOLS_CATEGORIES}
           widthClassName="w-3/4 sm:w-[250px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
