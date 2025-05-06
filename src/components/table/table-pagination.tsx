@@ -36,6 +36,7 @@ const TablePagination = ({
         <PaginationContent className="gap-2">
           <PaginationItem>
             <PaginationPrevious
+              aria-label="Go to previous page"
               aria-disabled={currentPage === 1}
               tabIndex={currentPage <= 1 ? -1 : undefined}
               className={
@@ -51,6 +52,7 @@ const TablePagination = ({
           </PaginationItem>
           <PaginationItem>
             <PaginationNext
+              aria-label="Go to next page"
               onClick={() => changePage(currentPage + 1)}
               aria-disabled={currentPage === totalPage}
               tabIndex={currentPage >= totalPage ? -1 : undefined}

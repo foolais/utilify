@@ -170,7 +170,6 @@ export const updateTools = async (
           description: description || "",
           category,
           status: status as ToolStatus,
-          created_by: session?.user?.id ?? "",
           updated_by: session?.user?.id ?? "",
         },
       }),

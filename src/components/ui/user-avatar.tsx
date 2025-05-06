@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "../../../auth";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar, AvatarFallback } from "./avatar";
 import { headers } from "next/headers";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Separator } from "./separator";
@@ -21,16 +21,15 @@ const UserAvatar = async () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex-center cursor-pointer gap-2">
+        <div className="flex-center cursor-pointer gap-2" role="button">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="hidden flex-col sm:flex">
-            <p className="text-sm font-semibold text-gray-600">
+            <p className="text-sm font-semibold text-gray-900">
               {session?.user?.email}
             </p>
-            <p className="text-xs font-semibold text-slate-400 capitalize md:text-sm">
+            <p className="text-xs font-semibold text-gray-600 capitalize md:text-sm">
               {session?.user?.role}
             </p>
           </div>

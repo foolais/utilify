@@ -23,7 +23,7 @@ export const adminHistoryColumns: ColumnDef<AdminHistory>[] = [
         <div className="flex-center mx-auto">
           <Badge
             className={cn(
-              "mx-auto",
+              "mx-auto text-black",
               Type === "LOAN" ? "bg-green-500" : "bg-blue-500",
             )}
           >

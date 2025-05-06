@@ -83,6 +83,7 @@ const FormSearch = ({
             <Button
               variant="outline"
               role="combobox"
+              aria-label="Select category"
               aria-expanded={open}
               className={cn("justify-between", widthInput)}
             >
