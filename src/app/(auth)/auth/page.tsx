@@ -7,15 +7,17 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const AuthPage = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isFormLogin, setIsFormLogin] = useState<boolean>(true);
 
   const handleToggleForm = () => setIsFormLogin((prev) => !prev);
 
+  console.log({ status, session });
+
   useEffect(() => {
     document.title = "Auth | Utilify App";
-    if (session && session.user) {
+    if (status === "authenticated" && session?.user) {
       if (session.user?.role === "admin") {
         router.push("/admin/dashboard");
       } else if (session.user?.role === "user") {
