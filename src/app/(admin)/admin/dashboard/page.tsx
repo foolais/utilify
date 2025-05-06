@@ -23,8 +23,8 @@ const AdminDashboardPage = async () => {
       </h1>
       <div>
         <h2 className="my-2 text-lg font-semibold">Overview</h2>
-        <div className="grid max-w-[1000px] grid-cols-2 gap-4 md:grid-cols-3">
-          {toolCount && (
+        <div className="grid max-w-[1000px] grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {toolCount !== undefined && (
             <CardData countData={`${toolCount} Tools`} variant="primary">
               <>
                 <WrenchIcon />
@@ -32,7 +32,7 @@ const AdminDashboardPage = async () => {
               </>
             </CardData>
           )}
-          {loanRequestCount && (
+          {loanRequestCount !== undefined && (
             <CardData
               countData={`${loanRequestCount} Requests`}
               variant="warning"
@@ -43,7 +43,7 @@ const AdminDashboardPage = async () => {
               </>
             </CardData>
           )}
-          {loanListCount && (
+          {loanListCount !== undefined && (
             <CardData countData={`${loanListCount} Loans`} variant="success">
               <>
                 <List />
@@ -60,7 +60,7 @@ const AdminDashboardPage = async () => {
                 <CardData key={log.id} isWithCount={false} variant="secondary">
                   <>
                     <Info />
-                    <span className="text-md">{log.action}</span>
+                    <span className="sm:text-md text-sm">{log.action}</span>
                   </>
                 </CardData>
               ))}

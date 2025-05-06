@@ -15,7 +15,7 @@ const AuthPage = () => {
 
   useEffect(() => {
     document.title = "Auth | Utilify App";
-    if (session) {
+    if (session && session.user) {
       if (session.user?.role === "admin") {
         router.push("/admin/dashboard");
       } else if (session.user?.role === "user") {
@@ -23,7 +23,7 @@ const AuthPage = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [session]);
 
   return (
     <div className="flex-center h-dvh">

@@ -23,14 +23,14 @@ const DashboardPage = async ({ searchParams }: iProps) => {
   const tools = await getAllTools(p, search, category, "available", 15);
 
   return (
-    <div className="px-6">
-      <div className="flex-center my-2">
+    <div className="md:px-6">
+      <div className="flex-center my-2 px-4">
         <ContainerSearchForm
           categoriesData={TOOLS_CATEGORIES}
-          widthClassName="w-3/4 sm:w-[250px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
+          widthClassName="w-full sm:w-[230px] md:w-auto md:min-w-[250px] lg:min-w-[300px]"
         />
       </div>
-      <div className="grid max-h-[70dvh] grid-cols-2 gap-4 overflow-y-auto md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid max-h-[60dvh] grid-cols-2 gap-4 overflow-y-auto sm:max-h-[70dvh] md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {tools?.data && tools?.data.length > 0 ? (
           tools?.data?.map((item, index) => <CardUtil key={index} {...item} />)
         ) : (
